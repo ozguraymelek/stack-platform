@@ -7,6 +7,7 @@ namespace _Project.Layers.Game_Logic.Platform
 {
     public class PlatformTracker
     {
+        public Platform InitialPlatform { get; private set; }
         public IInteractable CurrentPlatform { get; private set; }
         public IInteractable NextPlatform { get; private set; }
         

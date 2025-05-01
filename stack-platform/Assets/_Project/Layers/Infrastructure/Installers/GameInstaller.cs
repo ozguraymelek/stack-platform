@@ -15,6 +15,7 @@ namespace _Project.Layers.Infrastructure.Installers
     public class GameInstaller : MonoInstaller
     {
         [SerializeField] private float defaultPlayerMovementSpeed;
+        [SerializeField] private LevelDatabase levelDatabase;
         
         [SerializeField] private GameObject platformPrefab;
         [SerializeField] private Transform poolRoot;
@@ -44,14 +45,16 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.BindInstance(poolRoot).WithId("Root");
             Container.BindInstance(initialPoolSize).WithId("InitialPoolSize");
 
-            // Container.Bind<IPlatformData>().To<Platform>().AsSingle();
-            // Container.Bind<PlatformMovement>().FromComponentInHierarchy().AsSingle();
-
             Container.BindInterfacesAndSelfTo<ObjectPooling>()
                 .AsSingle()
                 .NonLazy();
             
+            Container.Bind<PlatformSpawner>().FromComponentInHierarchy().AsSingle();
+            
             Container.Bind<GameManager>().AsSingle();
+            
+            Container.Bind<LevelManager>().FromComponentInHierarchy().AsSingle().NonLazy();
+            Container.Bind<LevelDatabase>().FromInstance(levelDatabase).AsSingle();
             
             Container.DeclareSignal<GameStartedSignal>();
             Container.DeclareSignal<PlayerInteractedWithPlatformSignal>();
