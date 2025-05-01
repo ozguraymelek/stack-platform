@@ -1,18 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+using _Project.Layers.Game_Logic.Game_Flow;
 using UnityEngine;
+using Zenject;
 
-public class UIManager : MonoBehaviour
+namespace _Project.Layers.Presentation
 {
-    // Start is called before the first frame update
-    void Start()
+    public class UIManager : MonoBehaviour
     {
-        
-    }
+        [Inject] private GameManager _gameManager;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void PlayButtonOnClicked()
+        {
+            _gameManager.StartGame();
+        }
     }
 }

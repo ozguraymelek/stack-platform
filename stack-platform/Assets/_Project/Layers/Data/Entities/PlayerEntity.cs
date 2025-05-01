@@ -6,6 +6,7 @@ namespace _Project.Layers.Data.Entities
     {
         public float Speed { get; set; }
         public Vector3 Position { get; set; }
+        public bool IsMovementEnable { get; set; }
         
         public PlayerEntity(float initialSpeed)
         {

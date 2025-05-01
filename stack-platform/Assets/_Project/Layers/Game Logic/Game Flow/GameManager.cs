@@ -1,18 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
+using _Project.Layers.Game_Logic.Player;
+using _Project.Layers.Game_Logic.Signals;
 using UnityEngine;
+using Zenject;
 
-public class GameManager : MonoBehaviour
+namespace _Project.Layers.Game_Logic.Game_Flow
 {
-    // Start is called before the first frame update
-    void Start()
+    public class GameManager
     {
+        private readonly PlayerMovement _playerMovement;
+        private readonly SignalBus _signalBus;
+        public bool IsGameStarted { get; private set; } = false;
         
-    }
+        public GameManager(PlayerMovement playerMovement, SignalBus signalBus)
+        {
+            _playerMovement = playerMovement;
+            _signalBus = signalBus;
+        }
+        
+        public void StartGame()
+        {
+            if (IsGameStarted)
+                return;
 
-    // Update is called once per frame
-    void Update()
-    {
+            IsGameStarted = true;
+
+            // _playerMovement.EnableMovement();
+            _signalBus.Fire<GameStartedSignal>();
+        }
         
+        public void ResetGame()
+        {
+            IsGameStarted = false;
+            // _playerMovement.DisableMovement();
+        }
     }
 }
