@@ -58,7 +58,7 @@ ModelImporter:
       curves: []
       events:
       - time: 1
-        functionName: EnableMovement
+        functionName: EnableIsTriggerAndDisableRb
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

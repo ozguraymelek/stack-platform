@@ -40,7 +40,6 @@ namespace _Project.Layers.Game_Logic.Player
         private void OnGameStarted()
         {
             Debug.Log("Game Started signal received!");
-            // Buraya istediğin işlemi yazarsın
             Api.Rigidbody.useGravity = true;
             Api.Animator.SetBool("Start", true);
         }
@@ -48,6 +47,8 @@ namespace _Project.Layers.Game_Logic.Player
         private void OnLevelStarted()
         {
             _pureCoroutine.RunPureCoroutine(DelayedOnLevel(.5f, false));
+            Api.Collider.isTrigger = true;
+            Api.Rigidbody.useGravity = false;
             // Api.Animator.SetBool("Dance", false);
         }
         
@@ -60,6 +61,12 @@ namespace _Project.Layers.Game_Logic.Player
         {
             yield return new WaitForSeconds(seconds);
             Api.Animator.SetBool("Dance", condition);
+        }
+
+        public void EnableIsTriggerAndDisableRb()
+        {
+            Api.Rigidbody.useGravity = false;
+            Api.Collider.isTrigger = true;
         }
     }
 }

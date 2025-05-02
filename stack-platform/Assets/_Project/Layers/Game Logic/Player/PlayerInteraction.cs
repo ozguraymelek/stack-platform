@@ -30,7 +30,7 @@ namespace _Project.Layers.Game_Logic.Player
             }
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnTriggerEnter(Collider other)
         {
             if (!other.transform.TryGetComponent<IInteractable<Platform.Platform>>(out var currentInteractable)) return;
             if (!other.transform.TryGetComponent<IPlatformData>(out var currentPlatformData)) return;

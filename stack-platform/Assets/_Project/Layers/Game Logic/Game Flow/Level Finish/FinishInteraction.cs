@@ -43,8 +43,8 @@ namespace _Project.Layers.Game_Logic.Game_Flow.Level_Finish
         {
             
         }
-        
-        private void OnCollisionEnter(Collision other)
+
+        private void OnTriggerEnter(Collider other)
         {
             if (!other.transform.TryGetComponent(out PlayerApi playerApi)) return;
             _signalBus.Fire<LevelFinishedSignal>();
