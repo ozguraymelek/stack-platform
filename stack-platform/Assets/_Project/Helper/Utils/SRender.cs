@@ -25,6 +25,24 @@ namespace _Project.Helper.Utils
 
             return loc;
         }
+        public static void AnyObjectCornerVertexLocation(Renderer rend, out Vector3 left, out Vector3 right, VertexLocation leftLocation, VertexLocation rightLocation, bool maxY = true)
+        {
+            var b = rend.bounds;
+            var loc = Vector3.zero;
+            var maxYLoc = maxY ? b.max.y : b.min.y;
+            left = leftLocation switch
+            {
+                VertexLocation.LeftForward => new Vector3(b.min.x, maxYLoc, b.max.z),
+                VertexLocation.LeftBackward => new Vector3(b.min.x, maxYLoc, b.min.z),
+                _ => loc
+            };
+            right = rightLocation switch
+            {
+                VertexLocation.RightForward => new Vector3(b.max.x, maxYLoc, b.max.z),
+                VertexLocation.RightBackward => new Vector3(b.max.x, maxYLoc, b.min.z),
+                _ => loc
+            };
+        }
     }
     
     public enum AlignAxis
