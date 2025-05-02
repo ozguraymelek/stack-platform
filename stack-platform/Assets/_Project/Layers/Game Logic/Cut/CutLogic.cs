@@ -11,13 +11,18 @@ namespace _Project.Layers.Game_Logic.Cut
     {
         private PlatformTracker _platformTracker;
         private CutLogicData _cutLogicData;
+        private CutterObjectConfig _cutterObjectConfig;
         private IAlignment _alignment;
         
+        
+        public ICutter CurrentCutter;
+        
         [Inject]
-        public void Construct(PlatformTracker platformTracker, CutLogicData cutLogicData, IAlignment alignment)
+        public void Construct(PlatformTracker platformTracker, CutLogicData cutLogicData, CutterObjectConfig cutterObjectConfig, IAlignment alignment)
         {
             _platformTracker = platformTracker;
             _cutLogicData = cutLogicData;
+            _cutterObjectConfig = cutterObjectConfig;
             _alignment = alignment;
         }
         
@@ -25,6 +30,7 @@ namespace _Project.Layers.Game_Logic.Cut
         {
             FindCornerVertices();
             FindAngles();
+            CutterNextLocation();
         }
 
         private void FindCornerVertices()
@@ -49,46 +55,45 @@ namespace _Project.Layers.Game_Logic.Cut
                 _cutLogicData.NextPlatform.Location.BackwardRight, _platformTracker.CurrentPlatform.GetTransform().position, wantConjugateAngle: false);
         }
 
-        private void FindCutterNextLocation()
+        private void CutterNextLocation()
         {
             if (_cutLogicData.NextPlatform.Location.BackwardRight.x < _cutLogicData.CurrentPlatform.Location.ForwardLeft.x
                 || _cutLogicData.NextPlatform.Location.BackwardLeft.x > _cutLogicData.CurrentPlatform.Location.ForwardRight.x)
             {
                 Debug.LogError("There is no intersection");
-                // PerfectIntersectionStreak.Value = 0;
+                _alignment.PerfectIntersectionStreak = 0;
                 // ObjectPool.Enqueue(_platformRuntimeData.NextPlatform, "Platform");
-                // IsThereIntersection.Value = false;
                 return;
             }
 
             if (_cutLogicData.NextPlatform.Angle.WithBackwardLeft < _cutLogicData.CurrentPlatform.Angle.WithForwardLeft)
             {
-                // Debug.Log("platform on the left by player");
-                // IsThereIntersection.Value = true;
+                Debug.Log("platform on the left by player");
+                
                 // //TODO: add tolerance to perfect platform aligning
-                // if (_perfectAlignment.IsTherePerfectAlignment(_cutLogicData.NextPlatform.Location.BackwardLeft,
-                //         _cutLogicData.CurrentPlatform.Location.ForwardLeft,
-                //         _cutLogicData.AlignmentToleranceBoundLeft))
+                if (_alignment.IsTherePerfectAlignment(_cutLogicData.NextPlatform.Location.BackwardLeft,
+                _cutLogicData.CurrentPlatform.Location.ForwardLeft,
+                _cutLogicData.AlignmentToleranceBoundLeft))
                 {
                     // LastHullWidth.Value = STransform.GetAnyObjectWidth(_platformTracker.NextPlatform.gameObject);
-                    // _perfectAlignment.AlignPlatform(_platformRuntimeData.NextPlatform.transform,
-                    //     _platformRuntimeData.CurrentPlatform.transform);
-                    // _platformRuntimeData.NextPlatform.Outline.gameObject.SetActive(true);
-                    // PerfectIntersectionStreak.Value++;
+                    _alignment.AlignPlatform(_platformTracker.NextPlatform.GetTransform(),
+                        _platformTracker.CurrentPlatform.GetTransform());
+                    // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
+                    _alignment.PerfectIntersectionStreak++;
                     //call sound
                     // SoundManager.PlayNoteOnStreak?.Invoke(PerfectIntersectionStreak.Value);
                     //call text
-                    // CutLogicData.AlignmentToleranceBoundLeft = .25f;
+                    _cutLogicData.AlignmentToleranceBoundLeft = .25f;
 
                     return;
                 }
 
-                // PerfectIntersectionStreak.Value = 0;
+                _alignment.PerfectIntersectionStreak = 0;
                 // SoundManager.ResetOnStreakLost?.Invoke();
 
-                // Debug.Log("NOT Perfect Alignment on left");
-                // CutterObjectData.SpawnCutter(CutLogicData.CurrentPlatform.Location.UpperLeft,
-                //     Quaternion.Euler(0.0f, 0.0f, 90.0f), out CurrentCutter);
+                Debug.Log("NOT Perfect Alignment on left");
+                _cutterObjectConfig.SpawnCutter(_cutLogicData.CurrentPlatform.Location.ForwardLeft,
+                    Quaternion.Euler(0.0f, 0.0f, 90.0f), out CurrentCutter);
 
                 // if (CurrentCutter != null)
                 //     CurrentCutter.ExternalCut(CurrentCutter.transform, _platformRuntimeData.NextPlatform,
@@ -97,39 +102,39 @@ namespace _Project.Layers.Game_Logic.Cut
             }
 
             else if (_cutLogicData.NextPlatform.Angle.WithBackwardLeft <
-                     Mathf.Abs(_cutLogicData.CurrentPlatform.Angle.WithForwardRight))
+                     Mathf.Abs(_cutLogicData.CurrentPlatform.Angle.WithForwardLeft))
             {
-                // Debug.Log("platform on the right by player");
-                // IsThereIntersection.Value = true;
+                Debug.Log("platform on the right by player");
+                
                 //TODO: add tolerance to perfect platform aligning
-                // if (_perfectAlignment.IsTherePerfectAlignment(_cutLogicData.NextPlatform.Location.BackwardRight,
-                //         _cutLogicData.CurrentPlatform.Location.ForwardRight,
-                //         _cutLogicData.AlignmentToleranceBoundRight))
+                if (_alignment.IsTherePerfectAlignment(_cutLogicData.NextPlatform.Location.BackwardRight,
+                        _cutLogicData.CurrentPlatform.Location.ForwardRight,
+                        _cutLogicData.AlignmentToleranceBoundRight))
                 {
                     // LastHullWidth.Value = STransform.GetAnyObjectWidth(_platformRuntimeData.NextPlatform.gameObject);
-                    // _perfectAlignment.AlignPlatform(_platformRuntimeData.NextPlatform.transform,
-                    //     _platformRuntimeData.CurrentPlatform.transform);
-                    // _platformRuntimeData.NextPlatform.Outline.gameObject.SetActive(true);
-                    // PerfectIntersectionStreak.Value++;
+                    _alignment.AlignPlatform(_platformTracker.NextPlatform.GetTransform(),
+                        _platformTracker.CurrentPlatform.GetTransform());
+                    // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
+                    _alignment.PerfectIntersectionStreak++;
                     // //call sound
                     // SoundManager.PlayNoteOnStreak?.Invoke(PerfectIntersectionStreak.Value);
                     //call text
-                    // CutLogicData.AlignmentToleranceBoundRight = .25f;
+                    _cutLogicData.AlignmentToleranceBoundRight = .25f;
 
                     return;
                 }
 
-                // PerfectIntersectionStreak.Value = 0;
+                _alignment.PerfectIntersectionStreak = 0;
                 // SoundManager.ResetOnStreakLost?.Invoke();
 
-                // Debug.Log("NOT Perfect Alignment on right");
-                // CutterObjectData.SpawnCutter(_cutLogicData.CurrentPlatform.Location.ForwardRight,
-                //     Quaternion.Euler(0.0f, 0.0f, 90.0f), out CurrentCutter);
+                Debug.Log("NOT Perfect Alignment on right");
+                _cutterObjectConfig.SpawnCutter(_cutLogicData.CurrentPlatform.Location.ForwardRight,
+                    Quaternion.Euler(0.0f, 0.0f, 90.0f), out CurrentCutter);
 
                 // if (CurrentCutter != null)
-                //     CurrentCutter.ExternalCut(CurrentCutter.transform, _platformRuntimeData.NextPlatform,
-                //         FellHullSide.Right,
-                //         _platformTracker.NextPlatform.GetRenderer().material);
+                    // CurrentCutter.ExternalCut(CurrentCutter.transform, _platformRuntimeData.NextPlatform,
+                    //     FellHullSide.Right,
+                    //     _platformTracker.NextPlatform.GetRenderer().material);
             }
         }
     }
