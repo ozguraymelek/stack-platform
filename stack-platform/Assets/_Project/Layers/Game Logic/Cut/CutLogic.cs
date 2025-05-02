@@ -1,7 +1,9 @@
 
+using System;
 using System.Threading.Tasks;
 using _Project.Helper.Utils;
 using _Project.Layers.Game_Logic.Platform;
+using _Project.Layers.Game_Logic.Signals;
 using UnityEngine;
 using Zenject;
 
@@ -9,25 +11,42 @@ namespace _Project.Layers.Game_Logic.Cut
 {
     public class CutLogic : MonoBehaviour
     {
+        private SignalBus _signalBus;
+        
         private PlatformTracker _platformTracker;
         private CutLogicData _cutLogicData;
         private CutterObjectConfig _cutterObjectConfig;
         private IAlignment _alignment;
         
-        
-        public ICutter CurrentCutter;
+        private ICutter _currentCutter;
         
         [Inject]
-        public void Construct(PlatformTracker platformTracker, CutLogicData cutLogicData, CutterObjectConfig cutterObjectConfig, IAlignment alignment)
+        public void Construct(SignalBus signalBus, PlatformTracker platformTracker, CutLogicData cutLogicData, CutterObjectConfig cutterObjectConfig, IAlignment alignment)
         {
+            _signalBus = signalBus;
             _platformTracker = platformTracker;
             _cutLogicData = cutLogicData;
             _cutterObjectConfig = cutterObjectConfig;
             _alignment = alignment;
         }
+
+        private void OnEnable()
+        {
+            _signalBus.Subscribe<PlatformStopRequestedSignal>(Pretreatment);
+        }
+        
+        private void OnDisable()
+        {
+            _signalBus.Unsubscribe<PlatformStopRequestedSignal>(Pretreatment);
+        }
         
         private void Pretreatment()
         {
+            if (_platformTracker.NextPlatform == null)
+            {
+                Debug.LogError("Next Platform is not yet tracked!");
+                return;
+            }
             FindCornerVertices();
             FindAngles();
             CutterNextLocation();
@@ -93,12 +112,11 @@ namespace _Project.Layers.Game_Logic.Cut
 
                 Debug.Log("NOT Perfect Alignment on left");
                 _cutterObjectConfig.SpawnCutter(_cutLogicData.CurrentPlatform.Location.ForwardLeft,
-                    Quaternion.Euler(0.0f, 0.0f, 90.0f), out CurrentCutter);
+                    Quaternion.Euler(0.0f, 0.0f, 90.0f), out _currentCutter);
 
-                // if (CurrentCutter != null)
-                //     CurrentCutter.ExternalCut(CurrentCutter.transform, _platformRuntimeData.NextPlatform,
-                //         FellHullSide.Left,
-                //         _platformRuntimeData.NextPlatformRenderer.material);
+                _currentCutter?.ExternalCut(_currentCutter.GetTransform(), _platformTracker.NextPlatform,
+                    FellHullSide.Left,
+                    _platformTracker.NextPlatform.GetRenderer().material);
             }
 
             else if (_cutLogicData.NextPlatform.Angle.WithBackwardLeft <
@@ -129,12 +147,11 @@ namespace _Project.Layers.Game_Logic.Cut
 
                 Debug.Log("NOT Perfect Alignment on right");
                 _cutterObjectConfig.SpawnCutter(_cutLogicData.CurrentPlatform.Location.ForwardRight,
-                    Quaternion.Euler(0.0f, 0.0f, 90.0f), out CurrentCutter);
+                    Quaternion.Euler(0.0f, 0.0f, 90.0f), out _currentCutter);
 
-                // if (CurrentCutter != null)
-                    // CurrentCutter.ExternalCut(CurrentCutter.transform, _platformRuntimeData.NextPlatform,
-                    //     FellHullSide.Right,
-                    //     _platformTracker.NextPlatform.GetRenderer().material);
+                _currentCutter?.ExternalCut(_currentCutter.GetTransform(), _platformTracker.NextPlatform,
+                    FellHullSide.Left,
+                    _platformTracker.NextPlatform.GetRenderer().material);
             }
         }
     }

@@ -1,12 +1,11 @@
+using _Project.Layers.Game_Logic.Platform;
 using UnityEngine;
 
 namespace _Project.Layers.Game_Logic.Cut
 {
-    // 1. Define the cutter interface
     public interface ICutter
     {
-        // Executes a cut operation on the given target
-        void ExternalCut(GameObject target);
+        void ExternalCut(Transform objectWillSlice, IInteractable<Platform.Platform> objectToSlice, FellHullSide side , Material crossSectionMat = null);
         Transform GetTransform();
     }
 }

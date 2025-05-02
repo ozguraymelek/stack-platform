@@ -50,10 +50,8 @@ namespace _Project.Layers.Game_Logic.Platform
         private void OnPlayerEnteredPlatform(PlayerInteractedWithPlatformSignal signal)
         {
             if (_levelManager.CurrentLevel.IsReachedPlatformLimit) return;
-            // Debug.Log("PlayerInteractedWithPlatformSignal received >> Spawning next platform!");
             
             _platformTracker.SetCurrent(signal.InteractedPlatform);
-            // Debug.Log($"current platform: {_platformTracker.CurrentPlatform}");
 
             var newPlatform = _platformPool.GetFromPool().GetComponent<Platform>();
             SpawnedPlatforms.Add(newPlatform);
@@ -65,7 +63,6 @@ namespace _Project.Layers.Game_Logic.Platform
             SpawnedPlatforms[^1].IsSpawnedRight = isSpawnedRight;
             newPlatform.transform.position = spawnPos;
 
-            // NextPlatform olarak ata
             if (newPlatform.TryGetComponent<IInteractable<Platform>>(out var interactable))
             {
                 _platformTracker.SetNext(interactable);

@@ -22,5 +22,16 @@ namespace _Project.Helper.Utils
 
             return transform.position = new Vector3(randX, transform.position.y, refTr.position.z + offset);
         }
+        
+        public static Vector3 GetBottomCenter(GameObject obj)
+        {
+            var rend = obj.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                return new Vector3(rend.bounds.center.x, rend.bounds.max.y, rend.bounds.center.z - rend.bounds.extents.z);
+            }
+
+            return obj.transform.position;
+        }
     }
 }
