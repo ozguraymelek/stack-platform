@@ -11,12 +11,14 @@ namespace _Project.Layers.Game_Logic.Cut
     {
         private PlatformTracker _platformTracker;
         private CutLogicData _cutLogicData;
+        private IAlignment _alignment;
         
         [Inject]
-        public void Construct(PlatformTracker platformTracker, CutLogicData cutLogicData)
+        public void Construct(PlatformTracker platformTracker, CutLogicData cutLogicData, IAlignment alignment)
         {
             _platformTracker = platformTracker;
             _cutLogicData = cutLogicData;
+            _alignment = alignment;
         }
         
         private void Pretreatment()

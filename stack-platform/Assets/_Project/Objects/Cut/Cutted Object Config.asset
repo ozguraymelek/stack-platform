@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f24023973232248a5f44f75e35f392, type: 3}
+  m_Name: Cutted Object Config
+  m_EditorClassIdentifier: 
+  LeftHull:
+    LeftLocation: {x: 0, y: 0, z: 0}
+    RightLocation: {x: 0, y: 0, z: 0}
+    Width: 0
+  RightHull:
+    LeftLocation: {x: 0, y: 0, z: 0}
+    RightLocation: {x: 0, y: 0, z: 0}
+    Width: 0

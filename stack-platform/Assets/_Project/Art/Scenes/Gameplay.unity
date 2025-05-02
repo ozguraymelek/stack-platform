@@ -411,6 +411,10 @@ MonoBehaviour:
   finishPlatformPrefab: {fileID: 8822058165888743613, guid: b177ee99a437148448ef24f8f76e0721, type: 3}
   poolRoot: {fileID: 825846432}
   initialPoolSize: 10
+  CutterPrefab: {fileID: 7209224096298310112, guid: 4d3dd9b7c81b0514f864ee3bda209319, type: 3}
+  CutLogicData: {fileID: 11400000, guid: f16bb6e7a8fd8514a894862f6d605def, type: 2}
+  CutterObjectConfig: {fileID: 11400000, guid: 4780d8eda76a8404793f60fd130cedd6, type: 2}
+  CuttedObjectConfig: {fileID: 11400000, guid: 7d9da2b61fd2f4e4380dabcf516ca29c, type: 2}
 --- !u!4 &685489861
 Transform:
   m_ObjectHideFlags: 0
@@ -1019,6 +1023,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65212db255845ab4ebcadb5bb7e4ecde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &991779143
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 991779144}
+  - component: {fileID: 991779145}
+  m_Layer: 0
+  m_Name: Cut
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &991779144
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991779143}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1236524222}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &991779145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991779143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12f4a7f3b6833294799d697c57e2d074, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1168776758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1319,6 +1367,7 @@ Transform:
   - {fileID: 970908454}
   - {fileID: 760872083}
   - {fileID: 1168776759}
+  - {fileID: 991779144}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

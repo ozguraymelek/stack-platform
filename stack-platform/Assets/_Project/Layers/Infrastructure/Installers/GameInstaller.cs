@@ -1,6 +1,7 @@
 using _Project.Helper.ZEnject;
 using _Project.Layers.Data.Entities;
 using _Project.Layers.Data.Interfaces.Player;
+using _Project.Layers.Game_Logic.Cut;
 using _Project.Layers.Game_Logic.Game_Flow;
 using _Project.Layers.Game_Logic.Game_Flow.Level_Finish;
 using _Project.Layers.Game_Logic.Platform;
@@ -23,6 +24,11 @@ namespace _Project.Layers.Infrastructure.Installers
         [SerializeField] private GameObject finishPlatformPrefab;
         [SerializeField] private Transform poolRoot;
         [SerializeField] private int initialPoolSize = 5;
+
+        public Cutter CutterPrefab;
+        public CutLogicData CutLogicData;
+        public CutterObjectConfig CutterObjectConfig;
+        public CuttedObjectConfig CuttedObjectConfig;
         
         public override void InstallBindings()
         {
@@ -66,6 +72,22 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.Bind<FinishSpawner>().FromComponentInHierarchy().AsSingle();
             
             Container.Bind<GameManager>().AsSingle();
+
+            Container.BindInstance(CutLogicData).AsSingle();
+            Container.BindInstance(CutterObjectConfig).AsSingle();
+            Container.BindInstance(CuttedObjectConfig).AsSingle();
+            
+            Container.Bind<CutLogic>()
+                .FromComponentInHierarchy()
+                .AsSingle();
+            
+            Container.Bind<ICutter>()
+                .To<Cutter>()
+                .FromComponentInNewPrefab(CutterPrefab)
+                .AsSingle()
+                .NonLazy();
+
+            Container.Bind<IAlignment>().To<PerfectAlignment>().AsSingle();
             
             Container.DeclareSignal<GameStartedSignal>();
             Container.DeclareSignal<LevelStartedSignal>();
