@@ -31,9 +31,9 @@ namespace _Project.Layers.Game_Logic.Game_Flow.Level_Finish
         {
             if (_platformTracker.InitialPlatform == null) return;
             var spawnedFinishPlatform = _finishInteractionFactory.Create().GetComponent<Finish>();
-            Debug.Log(_platformTracker.InitialPlatform.GetTransform().name);
-            Debug.Log(_platformTracker.InitialPlatform.GetRenderer().name);
-            Debug.Log(spawnedFinishPlatform.Renderer);
+            // Debug.Log(_platformTracker.InitialPlatform.GetTransform().name);
+            // Debug.Log(_platformTracker.InitialPlatform.GetRenderer().name);
+            // Debug.Log(spawnedFinishPlatform.Renderer);
             _diffDirectionBetweenFwAndCenterForInitialPlatform = SMath.DirectionBetweenTwoVertexLocation(_platformTracker.InitialPlatform.GetRenderer(),
                 VertexLocation.Forward, VertexLocation.Center);
             _diffDirectionBetweenFwAndCenterForSpawnedPlatform = SMath.DirectionBetweenTwoVertexLocation(spawnedFinishPlatform.Renderer,

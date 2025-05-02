@@ -40,7 +40,7 @@ namespace _Project.Layers.Game_Logic.Platform
         {
             if (_isMoving == false) return;
 
-            Debug.Log($"spawned right: {_currentPlatformData.IsSpawnedRight}");
+            // Debug.Log($"spawned right: {_currentPlatformData.IsSpawnedRight}");
             transform.position += new Vector3(
                 (_currentPlatformData.IsSpawnedRight ? -MovementDirection.x : MovementDirection.x) * moveSpeed *
                 Time.deltaTime, 0, 0);
