@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace _Project.Layers.Game_Logic.Platform
 {
-    public interface IInteractable
+    public interface IInteractable<T> : IPlatformData
     {
-        Vector3 GetNextSpawnPosition(Transform transform, float platformLength);
+        T GetReference();
     }
 }

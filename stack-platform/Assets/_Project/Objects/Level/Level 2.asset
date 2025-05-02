@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9afa68925573be34bbb14f002e4d955f, type: 3}
   m_Name: Level 2
   m_EditorClassIdentifier: 
-  PlatformCountLimit: 3
-  FirstPlatformPosition: {x: 0, y: 0, z: 0}
-  FinishPlatformLocalPosition: {x: 0, y: 0, z: 0}
+  PlatformCountLimit: 8
+  FirstPlatformPosition: {x: 0, y: 0.05, z: 6.8588347}
+  FinishPlatformLocalPosition: {x: 0, y: 0.05, z: 13.576504}
+  IsReachedPlatformLimit: 0
+  IsReachedTarget: 0

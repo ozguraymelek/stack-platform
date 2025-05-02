@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlatformCountLimit: 3
   FirstPlatformPosition: {x: 0, y: 0, z: 0}
-  FinishPlatformLocalPosition: {x: 0, y: 0, z: 0}
+  FinishPlatformLocalPosition: {x: 0, y: 0.05, z: 6.8588347}
+  IsReachedPlatformLimit: 0
+  IsReachedTarget: 0

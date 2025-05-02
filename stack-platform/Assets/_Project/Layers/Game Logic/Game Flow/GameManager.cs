@@ -1,3 +1,4 @@
+using System;
 using _Project.Layers.Game_Logic.Player;
 using _Project.Layers.Game_Logic.Signals;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace _Project.Layers.Game_Logic.Game_Flow
             _playerMovement = playerMovement;
             _signalBus = signalBus;
         }
+
         
         public void StartGame()
         {
@@ -24,8 +26,8 @@ namespace _Project.Layers.Game_Logic.Game_Flow
 
             IsGameStarted = true;
 
-            // _playerMovement.EnableMovement();
             _signalBus.Fire<GameStartedSignal>();
+            // _playerMovement.EnableMovement();
         }
         
         public void ResetGame()

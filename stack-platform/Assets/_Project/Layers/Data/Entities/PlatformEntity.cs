@@ -7,7 +7,6 @@ namespace _Project.Layers.Data.Entities
     {
         bool IsSpawnedRight { get; set; }
         Transform GetTransform();
-        Platform GetReference();
         Renderer GetRenderer();
     }
 }

@@ -1,4 +1,5 @@
 using _Project.Helper.Utils;
+using _Project.Layers.Game_Logic.Game_Flow.Level_Finish;
 using _Project.Layers.Game_Logic.Platform;
 using UnityEngine;
 
@@ -15,14 +16,17 @@ namespace _Project.Layers.Data.Entities
         public bool IsReachedTarget;
         
         //TODO: change lastPlatform data type to finish platform script
-        public void AlignFirstPlatform(Platform lastPlatform, Platform firstPlatform)
+        public void AlignFirstPlatform(IInteractable<Finish> lastPlatform, IInteractable<Platform> firstPlatform)
         {
-            // FirstPlatformPosition = FinishPlatformLocalPosition;
-            firstPlatform.transform.position = new Vector3(lastPlatform.transform.position.x, 0.0f, lastPlatform.transform.position.z)
-                                               + SMath.DirectionBetweenTwoVertexLocation(firstPlatform.Renderer,
-                                                   VertexLocation.Forward, VertexLocation.Center) +
-                                               SMath.DirectionBetweenTwoVertexLocation(lastPlatform.Renderer,
-                                                   VertexLocation.Forward, VertexLocation.Center);
+            FirstPlatformPosition = FinishPlatformLocalPosition;
+            firstPlatform.GetTransform().transform.position = new Vector3(lastPlatform.GetTransform().position.x, 0.0f,
+                                                                  lastPlatform.GetTransform().position.z)
+                                                              + SMath.DirectionBetweenTwoVertexLocation(
+                                                                  firstPlatform.GetRenderer(),
+                                                                  VertexLocation.Forward, VertexLocation.Center) +
+                                                              SMath.DirectionBetweenTwoVertexLocation(
+                                                                  lastPlatform.GetRenderer(),
+                                                                  VertexLocation.Forward, VertexLocation.Center);
         }
     }
 }

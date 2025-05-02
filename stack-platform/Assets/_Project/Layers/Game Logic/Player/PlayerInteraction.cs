@@ -12,8 +12,8 @@ namespace _Project.Layers.Game_Logic.Player
     {
         private SignalBus _signalBus;
         private IInputProvider _inputProvider;
-        
-        private IInteractable _currentPlatform;
+
+        private PlatformTracker _platformTracker;
         
         [Inject]
         public void Construct(SignalBus signalBus, IInputProvider inputProvider)
@@ -32,9 +32,8 @@ namespace _Project.Layers.Game_Logic.Player
 
         private void OnCollisionEnter(Collision other)
         {
-            if (!other.transform.TryGetComponent<IInteractable>(out var currentInteractable)) return;
+            if (!other.transform.TryGetComponent<IInteractable<Platform.Platform>>(out var currentInteractable)) return;
             if (!other.transform.TryGetComponent<IPlatformData>(out var currentPlatformData)) return;
-                
             Debug.Log($"Player entered {currentPlatformData.GetTransform().name}");
             _signalBus.Fire(new PlayerInteractedWithPlatformSignal(currentInteractable, currentPlatformData));
         }

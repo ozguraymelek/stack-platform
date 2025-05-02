@@ -1,5 +1,6 @@
 using System;
 using _Project.Layers.Data.Entities;
+using Cinemachine;
 using UnityEngine;
 using Zenject;
 

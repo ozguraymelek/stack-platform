@@ -467,7 +467,7 @@ MonoBehaviour:
   Api:
     Rigidbody: {fileID: 4546104737424008264}
     Collider: {fileID: 4546104737424008270}
-    Animator: {fileID: 0}
+    Animator: {fileID: 5652809431090937852}
 --- !u!1 &4615313461300465381
 GameObject:
   m_ObjectHideFlags: 0

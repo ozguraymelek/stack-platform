@@ -298,6 +298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c401610cc36f864789ea7eee2d19a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 2
+  MovementDirection: {x: 1, y: 0, z: 0}
 --- !u!114 &7255877773468308013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,4 +312,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df32f0be0ea4ca24192df7edd4484929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsSpawnedRight: 0
+  Renderer: {fileID: 7973474366212873231}
