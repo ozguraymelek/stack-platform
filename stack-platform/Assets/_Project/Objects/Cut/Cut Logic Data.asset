@@ -14,25 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentPlatform:
     Angle:
-      WithForwardLeft: 0
-      WithForwardRight: 0
+      WithForwardLeft: -18.09712
+      WithForwardRight: 18.097118
       WithBackwardLeft: 0
       WithBackwardRight: 0
     Location:
-      ForwardLeft: {x: 0, y: 0, z: 0}
-      ForwardRight: {x: 0, y: 0, z: 0}
+      ForwardLeft: {x: -0.75, y: 0.05, z: 4.5}
+      ForwardRight: {x: -0.09641051, y: 0.05, z: 4.5}
       BackwardLeft: {x: 0, y: 0, z: 0}
       BackwardRight: {x: 0, y: 0, z: 0}
   NextPlatform:
     Angle:
       WithForwardLeft: 0
       WithForwardRight: 0
-      WithBackwardLeft: 0
-      WithBackwardRight: 0
+      WithBackwardLeft: 3.9393642
+      WithBackwardRight: 35.84634
     Location:
       ForwardLeft: {x: 0, y: 0, z: 0}
       ForwardRight: {x: 0, y: 0, z: 0}
-      BackwardLeft: {x: 0, y: 0, z: 0}
-      BackwardRight: {x: 0, y: 0, z: 0}
-  AlignmentToleranceBoundRight: 0
-  AlignmentToleranceBoundLeft: 0
+      BackwardLeft: {x: -0.3543418, y: 0.05, z: 4.5}
+      BackwardRight: {x: 0.29924768, y: 0.05, z: 4.5}
+  AlignmentToleranceBoundRight: 0.25
+  AlignmentToleranceBoundLeft: 0.25

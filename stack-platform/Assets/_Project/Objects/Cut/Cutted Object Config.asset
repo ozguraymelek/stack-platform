@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Cutted Object Config
   m_EditorClassIdentifier: 
   LeftHull:
-    LeftLocation: {x: 0, y: 0, z: 0}
-    RightLocation: {x: 0, y: 0, z: 0}
-    Width: 0
+    LeftLocation: {x: -0.3543418, y: 0.05, z: 6.5}
+    RightLocation: {x: -0.09641051, y: 0.010536194, z: 6.5}
+    Width: 0.2579313
   RightHull:
-    LeftLocation: {x: 0, y: 0, z: 0}
-    RightLocation: {x: 0, y: 0, z: 0}
-    Width: 0
+    LeftLocation: {x: -0.09641051, y: 0.05, z: 6.5}
+    RightLocation: {x: 0.29924768, y: -0.05, z: 6.5}
+    Width: 0.6535895

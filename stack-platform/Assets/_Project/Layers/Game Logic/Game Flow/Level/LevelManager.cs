@@ -1,5 +1,6 @@
 using System;
 using _Project.Layers.Data.Entities;
+using _Project.Layers.Game_Logic.Cut;
 using _Project.Layers.Game_Logic.Game_Flow.Level_Finish;
 using _Project.Layers.Game_Logic.Platform;
 using _Project.Layers.Game_Logic.Signals;
@@ -17,19 +18,22 @@ namespace _Project.Layers.Game_Logic.Game_Flow
         private PlatformTracker _platformTracker; //platform runtime data
         private SignalBus _signalBus;
         private LevelDatabase _levelDatabase;
+        private CutLogic _cutLogic;
         
         public LevelEntity CurrentLevel;
         public int CurrentLevelIndex;
         public int CurrentPlatformCount = 0;
         
         [Inject]
-        public void Construct(PlatformSpawner platformSpawner, FinishSpawner finishSpawner, PlatformTracker platformTracker, LevelDatabase levelDatabase, SignalBus signalBus)
+        public void Construct(PlatformSpawner platformSpawner, FinishSpawner finishSpawner, 
+            PlatformTracker platformTracker, LevelDatabase levelDatabase, SignalBus signalBus, CutLogic cutLogic)
         {
             _platformSpawner = platformSpawner;
             _finishSpawner = finishSpawner;
             _platformTracker = platformTracker;
             _levelDatabase = levelDatabase;
             _signalBus = signalBus;
+            _cutLogic = cutLogic;
         }
 
         private void Start()
@@ -44,7 +48,9 @@ namespace _Project.Layers.Game_Logic.Game_Flow
                 Debug.LogError("Invalid level index!");
                 return;
             }
-            
+
+            _cutLogic.LastHullWidth = 1.5f;
+            _cutLogic.CurrentCutter = null;
             CurrentLevel = _levelDatabase.levels[index];
             var levelData = _levelDatabase.levels[index];
             CurrentPlatformCount = 0;
