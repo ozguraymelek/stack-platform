@@ -34,13 +34,20 @@ namespace _Project.Layers.Game_Logic.Camera
         
         private void OnEnable()
         {
-            _signalBus.Subscribe<GameStartedSignal>(OnLevelStarted);
+            _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
+            _signalBus.Subscribe<LevelStartedSignal>(OnLevelStarted);
             _signalBus.Subscribe<LevelFinishedSignal>(OnLevelFinished);
         }
         private void OnDisable()
         {
-            _signalBus.Unsubscribe<GameStartedSignal>(OnLevelStarted);
+            _signalBus.Unsubscribe<GameStartedSignal>(OnGameStarted);
+            _signalBus.Unsubscribe<LevelStartedSignal>(OnLevelStarted);
             _signalBus.Unsubscribe<LevelFinishedSignal>(OnLevelFinished);
+        }
+        
+        private void OnGameStarted()
+        {
+            canOrbit = false;
         }
         
         private void OnLevelStarted()
@@ -56,8 +63,8 @@ namespace _Project.Layers.Game_Logic.Camera
         private void Update()
         {
             if (canOrbit == false) return;
-            _angle += speed * Time.deltaTime;
-            if (_angle >= 360f) _angle -= 360f;
+            _angle -= speed * Time.deltaTime;
+            if (_angle <= 0f) _angle += 360f;
             _orbital.m_Heading.m_Bias = _angle;
         } 
     }

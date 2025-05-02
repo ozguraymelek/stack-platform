@@ -49,6 +49,8 @@ namespace _Project.Layers.Game_Logic.Game_Flow.Level_Finish
             if (!other.transform.TryGetComponent(out PlayerApi playerApi)) return;
             _signalBus.Fire<LevelFinishedSignal>();
             _platformTracker.CurrentFinishPlatform = _finish;
+            
+            Debug.Log($"Player entered {_platformTracker.CurrentFinishPlatform.GetTransform().name}");
         }
     }
 }
