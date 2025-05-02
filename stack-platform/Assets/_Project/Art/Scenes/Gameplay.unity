@@ -407,7 +407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultPlayerMovementSpeed: 0.5
   levelDatabase: {fileID: 11400000, guid: f81587c20d01bc44b9a077841b42cf67, type: 2}
-  platformPrefab: {fileID: 7973474366212873233, guid: 60f9a3e61bff33d4ab529931cddf9a5b, type: 3}
+  platformPrefab: {fileID: 7255877773468308013, guid: 60f9a3e61bff33d4ab529931cddf9a5b, type: 3}
   finishPlatformPrefab: {fileID: 8822058165888743613, guid: b177ee99a437148448ef24f8f76e0721, type: 3}
   poolRoot: {fileID: 825846432}
   initialPoolSize: 10
@@ -1400,7 +1400,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scriptableObjectInstallers: []
+  _scriptableObjectInstallers:
+  - {fileID: 11400000, guid: 0d74f610d8b4692468e9e3e61fb62a4c, type: 2}
   _monoInstallers:
   - {fileID: 685489860}
   _installerPrefabs: []

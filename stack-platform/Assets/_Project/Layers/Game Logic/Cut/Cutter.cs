@@ -10,25 +10,33 @@ namespace _Project.Layers.Game_Logic.Cut
     // 2. Concrete implementation of the cutter
     public class Cutter : MonoBehaviour, ICutter
     {
-        private ObjectPooling _platformPool;
+        public class Factory : PlaceholderFactory<Cutter> { }
+        
+        public bool IsActiveHullOnLeft { get; set; }
+        public bool IsActiveHullOnRight { get; set; }
+        
+        private IObjectPool _platformPool;
         
         public GameObject CurrentRightHull;
         public GameObject CurrentLeftHull;
-
-        public bool IsActiveHullOnLeft;
-        public bool IsActiveHullOnRight;
         
-        [Inject] private CuttedObjectConfig _cuttedObjectConfig;
+        private CuttedObjectConfig _cuttedObjectConfig;
         
         public Vector3 ActiveHullDownCenterLocation;
-        
+        // private ICutter _cutter;
+
 
         [Inject]
-        public void Construct(ObjectPooling objectPooling)
+        public void Construct(IObjectPool objectPooling, CuttedObjectConfig cuttedObjectConfig)
         {
             _platformPool = objectPooling;
+            _cuttedObjectConfig = cuttedObjectConfig;
+            
+            Debug.Log($"[Cutter] Construct called! Config is {(_cuttedObjectConfig == null ? "NULL" : "OK")}");
+
         }
-        
+
+
         public void ExternalCut(Transform objectWillSlice, IInteractable<Platform.Platform> objectToSlice, FellHullSide side,
             Material crossSectionMat = null)
         {
@@ -57,7 +65,7 @@ namespace _Project.Layers.Game_Logic.Cut
                     break;
             }
             objectWillSlice.gameObject.SetActive(false);
-            _platformPool.ReturnToPool(objectToSlice.GetTransform().gameObject);
+            _platformPool.Release(objectToSlice.GetReference());
         }
 
         public Transform GetTransform()

@@ -19,15 +19,25 @@ namespace _Project.Layers.Game_Logic.Cut
         private IAlignment _alignment;
         
         private ICutter _currentCutter;
+        public ICutter CurrentCutter => _currentCutter;
+        
+        private Cutter.Factory _cutterFactory;
+        
+        public float LastHullWidth;
+
         
         [Inject]
-        public void Construct(SignalBus signalBus, PlatformTracker platformTracker, CutLogicData cutLogicData, CutterObjectConfig cutterObjectConfig, IAlignment alignment)
+        public void Construct(SignalBus signalBus, PlatformTracker platformTracker, CutLogicData cutLogicData, 
+            CutterObjectConfig cutterObjectConfig, IAlignment alignment, Cutter.Factory cutterFactory
+            /*ICutter cutter*/)
         {
             _signalBus = signalBus;
             _platformTracker = platformTracker;
             _cutLogicData = cutLogicData;
             _cutterObjectConfig = cutterObjectConfig;
             _alignment = alignment;
+            // _currentCutter = cutter;
+            _cutterFactory  = cutterFactory;
         }
 
         private void OnEnable()
@@ -94,7 +104,7 @@ namespace _Project.Layers.Game_Logic.Cut
                 _cutLogicData.CurrentPlatform.Location.ForwardLeft,
                 _cutLogicData.AlignmentToleranceBoundLeft))
                 {
-                    // LastHullWidth.Value = STransform.GetAnyObjectWidth(_platformTracker.NextPlatform.gameObject);
+                    LastHullWidth = STransform.GetAnyObjectWidth(_platformTracker.NextPlatform.GetTransform().gameObject);
                     _alignment.AlignPlatform(_platformTracker.NextPlatform.GetTransform(),
                         _platformTracker.CurrentPlatform.GetTransform());
                     // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
@@ -111,12 +121,18 @@ namespace _Project.Layers.Game_Logic.Cut
                 // SoundManager.ResetOnStreakLost?.Invoke();
 
                 Debug.Log("NOT Perfect Alignment on left");
-                _cutterObjectConfig.SpawnCutter(_cutLogicData.CurrentPlatform.Location.ForwardLeft,
+                _cutterObjectConfig.SpawnCutter(_cutterFactory, _cutLogicData.CurrentPlatform.Location.ForwardLeft,
                     Quaternion.Euler(0.0f, 0.0f, 90.0f), out _currentCutter);
 
-                _currentCutter?.ExternalCut(_currentCutter.GetTransform(), _platformTracker.NextPlatform,
+                if (_currentCutter == null)
+                {
+                    Debug.LogWarning("CutLogic: SpawnCutter hiç cutter üretmedi!");
+                    return;
+                }
+                    
+                _currentCutter.ExternalCut(_currentCutter.GetTransform(), _platformTracker.NextPlatform,
                     FellHullSide.Left,
-                    _platformTracker.NextPlatform.GetRenderer().material);
+                    _platformTracker.NextPlatform.GetRenderer().material);  
             }
 
             else if (_cutLogicData.NextPlatform.Angle.WithBackwardLeft <
@@ -129,7 +145,7 @@ namespace _Project.Layers.Game_Logic.Cut
                         _cutLogicData.CurrentPlatform.Location.ForwardRight,
                         _cutLogicData.AlignmentToleranceBoundRight))
                 {
-                    // LastHullWidth.Value = STransform.GetAnyObjectWidth(_platformRuntimeData.NextPlatform.gameObject);
+                    LastHullWidth = STransform.GetAnyObjectWidth(_platformTracker.NextPlatform.GetTransform().gameObject);
                     _alignment.AlignPlatform(_platformTracker.NextPlatform.GetTransform(),
                         _platformTracker.CurrentPlatform.GetTransform());
                     // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
@@ -146,12 +162,26 @@ namespace _Project.Layers.Game_Logic.Cut
                 // SoundManager.ResetOnStreakLost?.Invoke();
 
                 Debug.Log("NOT Perfect Alignment on right");
-                _cutterObjectConfig.SpawnCutter(_cutLogicData.CurrentPlatform.Location.ForwardRight,
+                if (_cutterObjectConfig == null)
+                {
+                    Debug.LogError("_cutterObjectConfig is null"); return;
+                }
+                if (_cutLogicData == null)
+                {
+                    Debug.LogError("_cutLogicData is null"); return;
+                }
+                _cutterObjectConfig.SpawnCutter(_cutterFactory, _cutLogicData.CurrentPlatform.Location.ForwardRight,
                     Quaternion.Euler(0.0f, 0.0f, 90.0f), out _currentCutter);
 
-                _currentCutter?.ExternalCut(_currentCutter.GetTransform(), _platformTracker.NextPlatform,
-                    FellHullSide.Left,
-                    _platformTracker.NextPlatform.GetRenderer().material);
+                if (_currentCutter == null)
+                {
+                    Debug.LogWarning("CutLogic: SpawnCutter hiç cutter üretmedi!");
+                    return;
+                }
+                    
+                _currentCutter.ExternalCut(_currentCutter.GetTransform(), _platformTracker.NextPlatform,
+                    FellHullSide.Right,
+                    _platformTracker.NextPlatform.GetRenderer().material);  
             }
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using _Project.Helper.ZEnject;
 using _Project.Layers.Data.Entities;
 using _Project.Layers.Data.Interfaces.Player;
@@ -20,7 +21,7 @@ namespace _Project.Layers.Infrastructure.Installers
         [SerializeField] private float defaultPlayerMovementSpeed;
         [SerializeField] private LevelDatabase levelDatabase;
         
-        [SerializeField] private GameObject platformPrefab;
+        [SerializeField] private Platform platformPrefab;
         [SerializeField] private GameObject finishPlatformPrefab;
         [SerializeField] private Transform poolRoot;
         [SerializeField] private int initialPoolSize = 5;
@@ -52,14 +53,19 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.BindInterfacesAndSelfTo<MovementProvider>().AsSingle().NonLazy();
             
             Container.Bind<PlatformTracker>().AsSingle().NonLazy();
+            
             Container.BindInstance(platformPrefab).WithId("Platform");
             Container.BindInstance(poolRoot).WithId("Root");
             Container.BindInstance(initialPoolSize).WithId("InitialPoolSize");
-
+            
+            Container.BindInstance(CutLogicData).AsSingle().NonLazy();
+            // Container.BindInstance(CutterObjectConfig).AsSingle().NonLazy();
+            // Container.Inject(CutterObjectConfig);
+            Container.BindInstance(CuttedObjectConfig).AsSingle().NonLazy();
+            
             Container.BindInterfacesAndSelfTo<ObjectPooling>()
                 .AsSingle()
                 .NonLazy();
-            
             
             // Container.Bind<FinishInteraction>().FromComponentInHierarchy().AsSingle().NonLazy();
             Container.BindFactory<FinishInteraction, FinishInteraction.Factory>()
@@ -72,20 +78,13 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.Bind<FinishSpawner>().FromComponentInHierarchy().AsSingle();
             
             Container.Bind<GameManager>().AsSingle();
-
-            Container.BindInstance(CutLogicData).AsSingle();
-            Container.BindInstance(CutterObjectConfig).AsSingle();
-            Container.BindInstance(CuttedObjectConfig).AsSingle();
+            
+            Container.BindFactory<Cutter, Cutter.Factory>()
+                .FromComponentInNewPrefab(CutterPrefab);
             
             Container.Bind<CutLogic>()
                 .FromComponentInHierarchy()
                 .AsSingle();
-            
-            Container.Bind<ICutter>()
-                .To<Cutter>()
-                .FromComponentInNewPrefab(CutterPrefab)
-                .AsSingle()
-                .NonLazy();
 
             Container.Bind<IAlignment>().To<PerfectAlignment>().AsSingle();
             

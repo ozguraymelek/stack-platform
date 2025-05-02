@@ -23,6 +23,41 @@ namespace _Project.Helper.Utils
             return transform.position = new Vector3(randX, transform.position.y, refTr.position.z + offset);
         }
         
+        public static void AdjustPivotByMesh(GameObject obj)
+        {
+            var mf = obj.GetComponent<MeshFilter>();
+            if (mf == null) return;
+
+            var mesh = mf.mesh;
+            var vertices = mesh.vertices;
+
+            var center = mesh.bounds.center;
+
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                vertices[i] -= center;
+            }
+
+            mesh.vertices = vertices;
+            mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
+
+            obj.transform.position += obj.transform.TransformVector(center);
+        }
+        
+        public static float GetAnyObjectWidth(GameObject obj)
+        {
+            var mf = obj.GetComponent<MeshFilter>();
+            if (mf == null) return 0;
+            
+            var mesh = mf.mesh;
+            var size = mesh.bounds.size;
+
+            var width = size.x * obj.transform.localScale.x;
+            
+            return width;
+        }
+        
         public static Vector3 GetBottomCenter(GameObject obj)
         {
             var rend = obj.GetComponent<Renderer>();

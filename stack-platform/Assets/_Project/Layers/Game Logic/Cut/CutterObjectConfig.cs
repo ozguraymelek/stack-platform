@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 namespace _Project.Layers.Game_Logic.Cut
 {
@@ -15,10 +16,17 @@ namespace _Project.Layers.Game_Logic.Cut
             Rotation = rotation;
         }
         
-        public void SpawnCutter(Vector3 position, Quaternion rotation, out ICutter spawnedCutter)
+        public void SpawnCutter(Cutter.Factory cutterFactory, Vector3 position, Quaternion rotation, out ICutter spawnedCutter)
         {
             SetInternalPositionBeforeAssign(ref position, ref rotation);
-            spawnedCutter = Instantiate(Prefab, position, rotation).GetComponent<Cutter>();
+            // spawnedCutter = Instantiate(Prefab, position, rotation).GetComponent<Cutter>();
+            if (cutterFactory == null)
+            {
+                Debug.LogError("CutterFactory is NULL! Injection olmadı.");
+                spawnedCutter = null;
+                return;
+            }
+            spawnedCutter = cutterFactory.Create();
             spawnedCutter.GetTransform().position = Position;
             spawnedCutter.GetTransform().rotation = Rotation;
         }

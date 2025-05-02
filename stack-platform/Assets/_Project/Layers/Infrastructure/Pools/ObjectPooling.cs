@@ -5,16 +5,16 @@ using Zenject;
 
 namespace _Project.Layers.Infrastructure.Pools
 {
-    public class ObjectPooling : IInitializable
+    public class ObjectPooling : IInitializable, IObjectPool
     {
         private readonly DiContainer _container;
-        private readonly GameObject _prefab;
+        private readonly Platform _prefab;
         private readonly Transform _root;
         private readonly int _initialPoolSize;
-        private readonly Queue<GameObject> _pool = new Queue<GameObject>();
+        private readonly Queue<IInteractable<Platform>> _pool = new Queue<IInteractable<Platform>>();
 
         public ObjectPooling(DiContainer container, 
-            [Inject(Id = "Platform")]GameObject prefab, 
+            [Inject(Id = "Platform")]Platform prefab, 
             [Inject(Id = "Root")]Transform root,
             [Inject(Id = "InitialPoolSize")] int initialPoolSize)
         {
@@ -29,32 +29,34 @@ namespace _Project.Layers.Infrastructure.Pools
             Preload(_initialPoolSize);
         }
 
-        public GameObject GetFromPool()
+        public IInteractable<Platform> Get()
         {
-            GameObject obj;
-            obj = _pool.Count > 0 
-                ? _pool.Dequeue() 
-                : _container.InstantiatePrefab(_prefab, _root);
+            var item = _pool.Count > 0
+                ? _pool.Dequeue()
+                : _container.InstantiatePrefab(_prefab.GetTransform().gameObject, _root)
+                    .GetComponent<IInteractable<Platform>>();
             
-            obj.SetActive(true);
-            return obj;
+            item.GetTransform().gameObject.SetActive(true);
+            return item;
         }
-        
-        public void ReturnToPool(GameObject obj)
+
+        public void Release(IInteractable<Platform> item)
         {
-            obj.SetActive(false);
-            obj.transform.SetParent(_root, false);
-            _pool.Enqueue(obj);
+            item.GetTransform().gameObject.SetActive(false);
+            item.GetTransform().transform.SetParent(_root, false);
+            _pool.Enqueue(item);
         }
         
         private void Preload(int count)
         {
             for (var i = 0; i < count; i++)
             {
-                var obj = _container.InstantiatePrefab(_prefab, _root);
-                obj.SetActive(false);
-                _pool.Enqueue(obj);
+                var item = _container.InstantiatePrefab(_prefab.GetTransform().gameObject, _root)
+                    .GetComponent<IInteractable<Platform>>();
+                item.GetTransform().gameObject.SetActive(false);
+                _pool.Enqueue(item);
             }
         }
+
     }
 }
