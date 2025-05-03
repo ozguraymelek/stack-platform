@@ -127,7 +127,7 @@ namespace _Project.Layers.Game_Logic.Cut
                         STransform.GetAnyObjectWidth(_platformTracker.NextPlatform.GetTransform().gameObject);
                     _alignment.AlignPlatform(_platformTracker.NextPlatform.GetTransform(),
                         _platformTracker.CurrentPlatform.GetTransform());
-                    // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
+                    _platformTracker.NextPlatform.GetOutline().gameObject.SetActive(true);
                     _alignment.PerfectIntersectionStreak++;
                     _signalBus.Fire(new StreakSignal(_alignment.PerfectIntersectionStreak));
                     _cutLogicData.AlignmentToleranceBoundLeft = .25f;
@@ -157,7 +157,7 @@ namespace _Project.Layers.Game_Logic.Cut
                         STransform.GetAnyObjectWidth(_platformTracker.NextPlatform.GetTransform().gameObject);
                     _alignment.AlignPlatform(_platformTracker.NextPlatform.GetTransform(),
                         _platformTracker.CurrentPlatform.GetTransform());
-                    // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
+                    _platformTracker.NextPlatform.GetOutline().gameObject.SetActive(true);
                     _alignment.PerfectIntersectionStreak++;
                     _signalBus.Fire(new StreakSignal(_alignment.PerfectIntersectionStreak));
                     _cutLogicData.AlignmentToleranceBoundRight = .25f;

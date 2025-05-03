@@ -56,6 +56,15 @@ namespace _Project.Helper.Utils
                 _ => loc
             };
         }
+        public static void AnyObjectAllCornerVerticesLocation(Renderer rend, out Vector3 upperLeftLoc, out Vector3 upperRightLoc, out Vector3 bottomLeftLoc, out Vector3 bottomRightLoc)
+        {
+            var b = rend.bounds;
+            upperLeftLoc  = new Vector3(b.min.x, b.max.y, b.max.z);
+            upperRightLoc = new Vector3(b.max.x, b.max.y, b.max.z); 
+            bottomLeftLoc  = new Vector3(b.min.x, b.max.y, b.min.z);
+            bottomRightLoc = new Vector3(b.max.x, b.max.y, b.min.z);
+        }
+
     }
     
     public enum AlignAxis

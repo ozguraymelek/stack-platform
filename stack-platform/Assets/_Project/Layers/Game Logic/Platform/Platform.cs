@@ -2,6 +2,7 @@ using System;
 using _Project.Helper.Utils;
 using _Project.Layers.Data.Entities;
 using _Project.Layers.Game_Logic.Cut;
+using _Project.Layers.Game_Logic.Effect;
 using _Project.Layers.Game_Logic.Game_Flow;
 using _Project.Layers.Infrastructure.Pools;
 using UnityEngine;
@@ -20,7 +21,9 @@ namespace _Project.Layers.Game_Logic.Platform
         }
         
         public bool IsSpawnedRight { get; set; }
+        public EdgeOutline Outline;
         public Renderer Renderer;
+        
         private UnityEngine.Camera _camera;
 
         private void Awake()
@@ -28,20 +31,13 @@ namespace _Project.Layers.Game_Logic.Platform
             _camera = UnityEngine.Camera.main;
         }
 
-        public Transform GetTransform()
-        {
-            return transform;
-        }
+        public Transform GetTransform() => transform;
 
-        public Platform GetReference()
-        {
-            return this;
-        }
+        public Platform GetReference() => this;
 
-        public Renderer GetRenderer()
-        {
-            return Renderer;
-        }
+        public EdgeOutline GetOutline() => Outline;
+
+        public Renderer GetRenderer() => Renderer;
         
         public void IsObjectOutOfCameraFrustum()
         {
