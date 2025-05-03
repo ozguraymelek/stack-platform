@@ -94,9 +94,10 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.DeclareSignal<PlayerInteractedWithPlatformSignal>();
             Container.DeclareSignal<PlayerInteractedWithFinishSignal>();
             Container.DeclareSignal<PlatformStopRequestedSignal>();
-            Container.DeclareSignal<OnStreak>();
-            Container.DeclareSignal<OnStreakLost>();
-
+            Container.DeclareSignal<StreakSignal>();
+            Container.DeclareSignal<StreakLostSignal>();
+            Container.DeclareSignal<MovementToggleSignal>();
+            Container.DeclareSignal<PhysicToggleSignal>();
         }
     }
 }

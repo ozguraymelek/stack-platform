@@ -4,6 +4,7 @@ using _Project.Layers.Data.Entities;
 using _Project.Layers.Data.Interfaces.Player;
 using _Project.Layers.Game_Logic.Cut;
 using _Project.Layers.Game_Logic.Platform;
+using _Project.Layers.Game_Logic.Signals;
 using UnityEngine;
 using Zenject;
 
@@ -13,6 +14,7 @@ namespace _Project.Layers.Game_Logic.Player
     {
         [Inject] private PlayerEntity _playerEntity;
         
+        private SignalBus _signalBus;
         private CutLogic _cutLogic;
         private PlatformTracker _platformTracker;
         
@@ -33,20 +35,31 @@ namespace _Project.Layers.Game_Logic.Player
         [SerializeField] private float angleThreshold;
         
         [Inject]
-        public void Construct(CutLogic cutLogic, PlatformTracker platformTracker)
+        public void Construct(SignalBus signalBus, CutLogic cutLogic, PlatformTracker platformTracker)
         {
+            _signalBus = signalBus;
             _cutLogic = cutLogic;
             _platformTracker = platformTracker;
             
             Debug.Log($"[PlayerMovement] Construct called! " +
                       $"Cut Logic is {(_cutLogic == null ? "NULL" : "OK")}" +
-                      $"Platform Tracker is {(_platformTracker == null ? "NULL" : "OK")}");
+                      $"Platform Tracker is {(_platformTracker == null ? "NULL" : "OK")}" +
+                      $"Signal Bus is {(_signalBus == null ? "NULL" : "OK")}");
+        }
+
+        private void OnEnable()
+        {
+            _signalBus.Subscribe<MovementToggleSignal>(OnToggleMovement);
+        }
+
+        private void OnDisable()
+        {
+            _signalBus.Unsubscribe<MovementToggleSignal>(OnToggleMovement);
 
         }
-        
+
         private void Update()
         {
-            Debug.Log(_playerEntity.IsMovementEnable);
             if (_playerEntity.IsMovementEnable == false)
             {
                 MovementDirection = Vector3.zero;
@@ -58,8 +71,6 @@ namespace _Project.Layers.Game_Logic.Player
             else MovementDirection = Vector3.forward;
             
             transform.position += MovementDirection.normalized * (Time.deltaTime * MovementSpeed);
-            
-            Debug.Log("Character moving");
         }
         
         private bool TryApproachToActiveHull()
@@ -125,15 +136,21 @@ namespace _Project.Layers.Game_Logic.Player
                 Debug.Log("OnSpawnPlatform");
             }
         }
+
+        private void OnToggleMovement(MovementToggleSignal signal)
+        {
+            if (signal.Enable) EnableMovement();
+            else DisableMovement();
+        }
         
         //called from animation events
-        public void EnableMovement()
+        private void EnableMovement()
         {
             _playerEntity.IsMovementEnable = true;
         }
 
         //called from animation events
-        public void DisableMovement()
+        private void DisableMovement()
         {
             _playerEntity.IsMovementEnable = false;
         }

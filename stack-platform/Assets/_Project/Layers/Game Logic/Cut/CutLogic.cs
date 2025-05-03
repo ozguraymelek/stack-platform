@@ -120,7 +120,7 @@ namespace _Project.Layers.Game_Logic.Cut
                     // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
                     _alignment.PerfectIntersectionStreak++;
                     //call sound
-                    _signalBus.Fire(new OnStreak(_alignment.PerfectIntersectionStreak));
+                    _signalBus.Fire(new StreakSignal(_alignment.PerfectIntersectionStreak));
                     //call text
                     _cutLogicData.AlignmentToleranceBoundLeft = .25f;
 
@@ -128,7 +128,7 @@ namespace _Project.Layers.Game_Logic.Cut
                 }
 
                 _alignment.PerfectIntersectionStreak = 0;
-                _signalBus.Fire<OnStreakLost>();
+                _signalBus.Fire<StreakLostSignal>();
 
                 Debug.Log("NOT Perfect Alignment on left");
                 SpawnCutter(_cutterFactory, _cutLogicData.CurrentPlatform.Location.ForwardLeft,
@@ -162,7 +162,7 @@ namespace _Project.Layers.Game_Logic.Cut
                     // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
                     _alignment.PerfectIntersectionStreak++;
                     // //call sound
-                    _signalBus.Fire(new OnStreak(_alignment.PerfectIntersectionStreak));
+                    _signalBus.Fire(new StreakSignal(_alignment.PerfectIntersectionStreak));
                     //call text
                     _cutLogicData.AlignmentToleranceBoundRight = .25f;
 
@@ -170,7 +170,7 @@ namespace _Project.Layers.Game_Logic.Cut
                 }
 
                 _alignment.PerfectIntersectionStreak = 0;
-                _signalBus.Fire<OnStreakLost>();
+                _signalBus.Fire<StreakLostSignal>();
 
                 Debug.Log("NOT Perfect Alignment on right");
                 if (_cutterObjectConfig == null)

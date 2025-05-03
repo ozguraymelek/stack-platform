@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace _Project.Layers.Game_Logic.Signals
 {
-    public class OnStreak
+    public class StreakSignal
     {
         public int Streak { get; }
 
-        public OnStreak(int streak)
+        public StreakSignal(int streak)
         {
             Streak = streak;
         }

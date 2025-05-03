@@ -29,12 +29,17 @@ namespace _Project.Layers.Game_Logic.Player
             _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
             _signalBus.Subscribe<LevelStartedSignal>(OnLevelStarted);
             _signalBus.Subscribe<LevelFinishedSignal>(OnLevelFinished);
+            
+            _signalBus.Subscribe<PhysicToggleSignal>(EnableIsTriggerAndDisableRb);
         }
         private void OnDisable()
         {
             _signalBus.Unsubscribe<GameStartedSignal>(OnGameStarted);
             _signalBus.Unsubscribe<LevelStartedSignal>(OnLevelStarted);
             _signalBus.Unsubscribe<LevelFinishedSignal>(OnLevelFinished);
+            
+            
+            _signalBus.Unsubscribe<PhysicToggleSignal>(EnableIsTriggerAndDisableRb);
         }
         
         private void OnGameStarted()

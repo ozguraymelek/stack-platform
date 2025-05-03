@@ -25,14 +25,14 @@ namespace _Project.Layers.Game_Logic.Sound
 
         private void OnEnable()
         {
-            _signalBus.Subscribe<OnStreak>(PlaySound);
-            _signalBus.Subscribe<OnStreakLost>(ResetPitch);
+            _signalBus.Subscribe<StreakSignal>(PlaySound);
+            _signalBus.Subscribe<StreakLostSignal>(ResetPitch);
         }
 
         private void OnDisable()
         {
-            _signalBus.Unsubscribe<OnStreak>(PlaySound);
-            _signalBus.Unsubscribe<OnStreakLost>(ResetPitch);
+            _signalBus.Unsubscribe<StreakSignal>(PlaySound);
+            _signalBus.Unsubscribe<StreakLostSignal>(ResetPitch);
         }
 
         private void Pitch(int streak)
@@ -40,7 +40,7 @@ namespace _Project.Layers.Game_Logic.Sound
             CurrentPitch = SoundData.BasePitch + SoundData.PitchIncreaseStep * streak;
         }
         
-        private void PlaySound(OnStreak signal)
+        private void PlaySound(StreakSignal signal)
         {
             Pitch(signal.Streak);
             AudioSource.pitch = CurrentPitch;
