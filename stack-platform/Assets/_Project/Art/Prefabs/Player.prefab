@@ -452,6 +452,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ce15e4120cb7c4da72304b2795ca7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MovementDirection: {x: 0, y: 0, z: 0}
+  MovementSpeed: 0.61
+  RotationSpeed: 10
+  Distance: 0
+  Angle: 0
+  Direction: {x: 0, y: 0, z: 0}
+  targetYRotation: 0
+  IsActiveHullApproachCompleted: 0
+  distanceThreshold: 0.1
+  angleThreshold: 0.1
 --- !u!114 &4327303099377932762
 MonoBehaviour:
   m_ObjectHideFlags: 0

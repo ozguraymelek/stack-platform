@@ -7,14 +7,14 @@ namespace _Project.Layers.Game_Logic.Player.Services
     public class MovementProvider : IMovementProvider, IInitializable
     {
         private readonly EndlessMovement _endless;
-        private readonly SwerveMovement _swerve;
+        // private readonly SwerveMovement _swerve;
         
         public IMovement Current { get; set; }
 
-        public MovementProvider(EndlessMovement endless, SwerveMovement swerve)
+        public MovementProvider(EndlessMovement endless /*SwerveMovement */)
         {
             _endless = endless;
-            _swerve = swerve;
+            // _swerve = swerve;
         }
         
         public void Set(IMovement movement)

@@ -42,6 +42,12 @@ namespace _Project.Layers.Infrastructure.Pools
 
         public void Release(IInteractable<Platform> item)
         {
+            if (item.GetTransform().gameObject.layer == LayerMask.NameToLayer("Initial"))
+                return;
+            
+            if (item.GetTransform().gameObject.layer == LayerMask.NameToLayer("Finish"))
+                return;
+            
             item.GetTransform().gameObject.SetActive(false);
             item.GetTransform().transform.SetParent(_root, false);
             _pool.Enqueue(item);

@@ -4,6 +4,19 @@ namespace _Project.Helper.Utils
 {
     public static class SRender 
     {
+        public static bool IsObjectOutOfCameraFrustum(Renderer renderer, UnityEngine.Camera camera)
+        {
+            if (renderer == null)
+            {
+                Debug.LogError("Renderer is null");
+                return false;
+            }
+
+            var planes = GeometryUtility.CalculateFrustumPlanes(camera);
+
+            return !GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+        }
+        
         public static Vector3 AnyObjectVertexLocation(Renderer rend, VertexLocation location, bool maxY = true)
         {
             var b = rend.bounds;

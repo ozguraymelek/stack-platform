@@ -58,12 +58,13 @@ namespace _Project.Layers.Game_Logic.Platform
         
         private void OnPlayerEnteredPlatform(PlayerInteractedWithPlatformSignal signal)
         {
-            if ((_levelManager.CurrentLevel.IsReachedPlatformLimit == false &&
-                 _platformTracker.InitialPlatform != null))
+            if (_levelManager.CurrentLevel.IsReachedPlatformLimit == false &&
+                 _platformTracker.InitialPlatform != null)
             {
                 _platformTracker.SetCurrent(signal.InteractedPlatform);
 
                 var newPlatform = _platformPool.Get().GetReference();
+                newPlatform.PlatformPool = _platformPool;
 
                 if (_cutLogic.CurrentCutter != null && _cutLogic.CurrentCutter.IsActiveHullOnLeft == true)
                 {

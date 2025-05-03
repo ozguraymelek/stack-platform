@@ -46,11 +46,11 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.Bind<PlayerInteraction>().FromComponentInHierarchy().AsSingle().NonLazy();
 
             //movement
-            Container.Bind<EndlessMovement>().AsSingle();
-            Container.Bind<SwerveMovement>().AsSingle();
+            // Container.Bind<EndlessMovement>().AsSingle();
+            // Container.Bind<SwerveMovement>().AsSingle();
             
             //provider
-            Container.BindInterfacesAndSelfTo<MovementProvider>().AsSingle().NonLazy();
+            // Container.BindInterfacesAndSelfTo<MovementProvider>().AsSingle().NonLazy();
             
             Container.Bind<PlatformTracker>().AsSingle().NonLazy();
             
@@ -94,6 +94,9 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.DeclareSignal<PlayerInteractedWithPlatformSignal>();
             Container.DeclareSignal<PlayerInteractedWithFinishSignal>();
             Container.DeclareSignal<PlatformStopRequestedSignal>();
+            Container.DeclareSignal<OnStreak>();
+            Container.DeclareSignal<OnStreakLost>();
+
         }
     }
 }

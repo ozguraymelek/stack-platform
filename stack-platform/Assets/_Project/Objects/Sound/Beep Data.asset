@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9afa68925573be34bbb14f002e4d955f, type: 3}
-  m_Name: Level 2
+  m_Script: {fileID: 11500000, guid: 89725b3235c1cfe41a42ab0445349df1, type: 3}
+  m_Name: Beep Data
   m_EditorClassIdentifier: 
-  PlatformCountLimit: 4
-  FirstPlatformPosition: {x: 0, y: 0.05, z: 15.576504}
-  FinishPlatformLocalPosition: {x: 0, y: 0.05, z: 15.576504}
-  IsReachedPlatformLimit: 0
-  IsReachedTarget: 0
+  BasePitch: 1
+  PitchIncreaseStep: 0.1

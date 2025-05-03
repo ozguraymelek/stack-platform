@@ -14,17 +14,14 @@ namespace _Project.Layers.Game_Logic.Cut
         
         public bool IsActiveHullOnLeft { get; set; }
         public bool IsActiveHullOnRight { get; set; }
-        
+        public Vector3 ActiveHullDownCenterLocation { get; set; }
+
         private IObjectPool _platformPool;
         
         public GameObject CurrentRightHull;
         public GameObject CurrentLeftHull;
         
         private CuttedObjectConfig _cuttedObjectConfig;
-        
-        public Vector3 ActiveHullDownCenterLocation;
-        // private ICutter _cutter;
-
 
         [Inject]
         public void Construct(IObjectPool objectPooling, CuttedObjectConfig cuttedObjectConfig)

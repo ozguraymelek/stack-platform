@@ -27,15 +27,13 @@ namespace _Project.Layers.Game_Logic.Cut
 
         [Inject]
         public void Construct(SignalBus signalBus, PlatformTracker platformTracker, CutLogicData cutLogicData,
-            CutterObjectConfig cutterObjectConfig, IAlignment alignment, Cutter.Factory cutterFactory
-            /*ICutter cutter*/)
+            CutterObjectConfig cutterObjectConfig, IAlignment alignment, Cutter.Factory cutterFactory)
         {
             _signalBus = signalBus;
             _platformTracker = platformTracker;
             _cutLogicData = cutLogicData;
             _cutterObjectConfig = cutterObjectConfig;
             _alignment = alignment;
-            // _currentCutter = cutter;
             _cutterFactory = cutterFactory;
         }
 
@@ -54,7 +52,7 @@ namespace _Project.Layers.Game_Logic.Cut
         {
             if (_platformTracker.NextPlatform == null)
             {
-                Debug.LogError("Next Platform is not yet tracked!");
+                Debug.LogWarning("Pretreatment canceled, Next Platform is not yet tracked!");
                 return;
             }
 
@@ -122,7 +120,7 @@ namespace _Project.Layers.Game_Logic.Cut
                     // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
                     _alignment.PerfectIntersectionStreak++;
                     //call sound
-                    // SoundManager.PlayNoteOnStreak?.Invoke(PerfectIntersectionStreak.Value);
+                    _signalBus.Fire(new OnStreak(_alignment.PerfectIntersectionStreak));
                     //call text
                     _cutLogicData.AlignmentToleranceBoundLeft = .25f;
 
@@ -130,7 +128,7 @@ namespace _Project.Layers.Game_Logic.Cut
                 }
 
                 _alignment.PerfectIntersectionStreak = 0;
-                // SoundManager.ResetOnStreakLost?.Invoke();
+                _signalBus.Fire<OnStreakLost>();
 
                 Debug.Log("NOT Perfect Alignment on left");
                 SpawnCutter(_cutterFactory, _cutLogicData.CurrentPlatform.Location.ForwardLeft,
@@ -142,7 +140,7 @@ namespace _Project.Layers.Game_Logic.Cut
                     return;
                 }
 
-                CurrentCutter.ExternalCut(CurrentCutter.GetTransform(), _platformTracker.NextPlatform,
+                CurrentCutter?.ExternalCut(CurrentCutter.GetTransform(), _platformTracker.NextPlatform,
                     FellHullSide.Left,
                     _platformTracker.NextPlatform.GetRenderer().material);
             }
@@ -164,7 +162,7 @@ namespace _Project.Layers.Game_Logic.Cut
                     // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
                     _alignment.PerfectIntersectionStreak++;
                     // //call sound
-                    // SoundManager.PlayNoteOnStreak?.Invoke(PerfectIntersectionStreak.Value);
+                    _signalBus.Fire(new OnStreak(_alignment.PerfectIntersectionStreak));
                     //call text
                     _cutLogicData.AlignmentToleranceBoundRight = .25f;
 
@@ -172,7 +170,7 @@ namespace _Project.Layers.Game_Logic.Cut
                 }
 
                 _alignment.PerfectIntersectionStreak = 0;
-                // SoundManager.ResetOnStreakLost?.Invoke();
+                _signalBus.Fire<OnStreakLost>();
 
                 Debug.Log("NOT Perfect Alignment on right");
                 if (_cutterObjectConfig == null)
@@ -190,13 +188,7 @@ namespace _Project.Layers.Game_Logic.Cut
                 SpawnCutter(_cutterFactory, _cutLogicData.CurrentPlatform.Location.ForwardRight,
                     Quaternion.Euler(0.0f, 0.0f, 90.0f), out CurrentCutter);
 
-                if (CurrentCutter == null)
-                {
-                    Debug.LogWarning("CutLogic: SpawnCutter hiç cutter üretmedi!");
-                    return;
-                }
-
-                CurrentCutter.ExternalCut(CurrentCutter.GetTransform(), _platformTracker.NextPlatform,
+                CurrentCutter?.ExternalCut(CurrentCutter.GetTransform(), _platformTracker.NextPlatform,
                     FellHullSide.Right,
                     _platformTracker.NextPlatform.GetRenderer().material);
             }
