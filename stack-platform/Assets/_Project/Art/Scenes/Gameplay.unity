@@ -617,7 +617,7 @@ MonoBehaviour:
   platformPrefab: {fileID: 7255877773468308013, guid: 60f9a3e61bff33d4ab529931cddf9a5b, type: 3}
   finishPlatformPrefab: {fileID: 8822058165888743613, guid: b177ee99a437148448ef24f8f76e0721, type: 3}
   poolRoot: {fileID: 825846432}
-  initialPoolSize: 10
+  initialPoolSize: 3
   CutterPrefab: {fileID: 7209224096298310112, guid: 4d3dd9b7c81b0514f864ee3bda209319, type: 3}
   CutLogicData: {fileID: 11400000, guid: f16bb6e7a8fd8514a894862f6d605def, type: 2}
   CutterObjectConfig: {fileID: 11400000, guid: 4780d8eda76a8404793f60fd130cedd6, type: 2}

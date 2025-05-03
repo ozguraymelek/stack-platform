@@ -29,6 +29,7 @@ namespace _Project.Layers.Game_Logic.Platform
 
         private void OnEnable()
         {
+            _isMoving = true;
             _signalBus.Subscribe<PlatformStopRequestedSignal>(OnStopRequested);
         }
 
