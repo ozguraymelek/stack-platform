@@ -40,11 +40,12 @@ namespace _Project.Layers.Game_Logic.Player
             _signalBus = signalBus;
             _cutLogic = cutLogic;
             _platformTracker = platformTracker;
-            
-            Debug.Log($"[PlayerMovement] Construct called! " +
-                      $"Cut Logic is {(_cutLogic == null ? "NULL" : "OK")}" +
-                      $"Platform Tracker is {(_platformTracker == null ? "NULL" : "OK")}" +
-                      $"Signal Bus is {(_signalBus == null ? "NULL" : "OK")}");
+
+            SLog.InjectionStatus(this,
+                (nameof(_signalBus), _signalBus),
+                (nameof(_cutLogic), _cutLogic),
+                (nameof(_platformTracker), _platformTracker)
+            );
         }
 
         private void OnEnable()
@@ -131,9 +132,6 @@ namespace _Project.Layers.Game_Logic.Player
                 targetYRotation = transform.eulerAngles.y - Angle;
                 
                 MovementDirection = _platformTracker.CurrentPlatform.GetTransform().forward;
-                
-                // PlatformSpawner.OnSpawnPlatform?.Invoke();
-                Debug.Log("OnSpawnPlatform");
             }
         }
 
@@ -143,13 +141,11 @@ namespace _Project.Layers.Game_Logic.Player
             else DisableMovement();
         }
         
-        //called from animation events
         private void EnableMovement()
         {
             _playerEntity.IsMovementEnable = true;
         }
 
-        //called from animation events
         private void DisableMovement()
         {
             _playerEntity.IsMovementEnable = false;

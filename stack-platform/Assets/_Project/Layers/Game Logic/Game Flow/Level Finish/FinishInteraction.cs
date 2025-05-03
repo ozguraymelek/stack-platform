@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using _Project.Helper.Utils;
 using _Project.Layers.Game_Logic.Platform;
 using _Project.Layers.Game_Logic.Player;
 using _Project.Layers.Game_Logic.Signals;
@@ -16,6 +17,7 @@ namespace _Project.Layers.Game_Logic.Game_Flow.Level_Finish
         private PlayerApi _playerApi;
         private PlatformTracker _platformTracker;
         private Finish _finish;
+        private IGroundCheckWrapper _groundCheckWrapper;
 
         private void Awake()
         {
@@ -23,25 +25,18 @@ namespace _Project.Layers.Game_Logic.Game_Flow.Level_Finish
         }
 
         [Inject]
-        public void Construct(SignalBus signalBus, PlatformTracker platformTracker)
+        public void Construct(SignalBus signalBus, PlatformTracker platformTracker,
+            IGroundCheckWrapper groundCheckWrapper)
         {
             _signalBus = signalBus;
             _platformTracker = platformTracker;
-        }
-
-        private void OnEnable()
-        {
-            _signalBus.Subscribe<PlayerInteractedWithFinishSignal>(OnPlayerReachedFinish);
-        }
-
-        private void OnDisable()
-        {
-            _signalBus.Unsubscribe<PlayerInteractedWithFinishSignal>(OnPlayerReachedFinish);
-        }
-
-        private void OnPlayerReachedFinish(PlayerInteractedWithFinishSignal signal)
-        {
+            _groundCheckWrapper = groundCheckWrapper;
             
+            SLog.InjectionStatus(this,
+                (nameof(_signalBus), _signalBus),
+                (nameof(_platformTracker), _platformTracker),
+                (nameof(_groundCheckWrapper), _groundCheckWrapper)
+            );
         }
 
         private void OnTriggerEnter(Collider other)
@@ -49,8 +44,7 @@ namespace _Project.Layers.Game_Logic.Game_Flow.Level_Finish
             if (!other.transform.TryGetComponent(out PlayerApi playerApi)) return;
             _signalBus.Fire<LevelFinishedSignal>();
             _platformTracker.CurrentFinishPlatform = _finish;
-            
-            Debug.Log($"Player entered {_platformTracker.CurrentFinishPlatform.GetTransform().name}");
+            _groundCheckWrapper.CanCheck = false;
         }
     }
 }

@@ -37,27 +37,14 @@ namespace _Project.Layers.Game_Logic.Camera
             _signalBus.Subscribe<GameStartedSignal>(OnGameStarted);
             _signalBus.Subscribe<LevelStartedSignal>(OnLevelStarted);
             _signalBus.Subscribe<LevelFinishedSignal>(OnLevelFinished);
+            _signalBus.Subscribe<GameFailedSignal>(UnbindFollowProperty);
         }
         private void OnDisable()
         {
             _signalBus.Unsubscribe<GameStartedSignal>(OnGameStarted);
             _signalBus.Unsubscribe<LevelStartedSignal>(OnLevelStarted);
             _signalBus.Unsubscribe<LevelFinishedSignal>(OnLevelFinished);
-        }
-        
-        private void OnGameStarted()
-        {
-            canOrbit = false;
-        }
-        
-        private void OnLevelStarted()
-        {
-            canOrbit = false;
-        }
-        
-        private void OnLevelFinished()
-        {
-            canOrbit = true;
+            _signalBus.Unsubscribe<GameFailedSignal>(UnbindFollowProperty);
         }
         
         private void Update()
@@ -67,5 +54,27 @@ namespace _Project.Layers.Game_Logic.Camera
             if (_angle <= 0f) _angle += 360f;
             _orbital.m_Heading.m_Bias = _angle;
         } 
+        
+        private void OnGameStarted()
+        {
+            canOrbit = false;
+        }
+        
+        private void OnLevelStarted()
+        {
+            canOrbit = false;
+            _orbital.m_Heading.m_Bias = 0;
+            _angle = 0;
+        }
+        
+        private void OnLevelFinished()
+        {
+            canOrbit = true;
+        }
+
+        private void UnbindFollowProperty()
+        {
+            _vCam.Follow = null;
+        }
     }
 }

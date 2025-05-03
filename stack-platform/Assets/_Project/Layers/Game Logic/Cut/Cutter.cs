@@ -29,8 +29,10 @@ namespace _Project.Layers.Game_Logic.Cut
             _platformPool = objectPooling;
             _cuttedObjectConfig = cuttedObjectConfig;
             
-            Debug.Log($"[Cutter] Construct called! Config is {(_cuttedObjectConfig == null ? "NULL" : "OK")}");
-
+            SLog.InjectionStatus(this,
+                (nameof(_platformPool), _platformPool),
+                (nameof(_cuttedObjectConfig), _cuttedObjectConfig)
+            );
         }
 
 
@@ -47,6 +49,7 @@ namespace _Project.Layers.Game_Logic.Cut
             switch (side)
             {
                 case FellHullSide.Left:
+                    CurrentRightHull.layer = LayerMask.NameToLayer("Platform");
                     _cuttedObjectConfig.SetFallComponents(CurrentLeftHull);
                     _cuttedObjectConfig.SetActiveComponents(CurrentRightHull, ref _cuttedObjectConfig.RightHull);
                     ActiveHullDownCenterLocation = STransform.GetBottomCenter(CurrentRightHull.gameObject);
@@ -54,6 +57,7 @@ namespace _Project.Layers.Game_Logic.Cut
                     IsActiveHullOnRight = true;
                     break;
                 case FellHullSide.Right:
+                    CurrentLeftHull.layer = LayerMask.NameToLayer("Platform");
                     _cuttedObjectConfig.SetFallComponents(CurrentRightHull);
                     _cuttedObjectConfig.SetActiveComponents(CurrentLeftHull, ref _cuttedObjectConfig.LeftHull);
                     ActiveHullDownCenterLocation = STransform.GetBottomCenter(CurrentLeftHull.gameObject);

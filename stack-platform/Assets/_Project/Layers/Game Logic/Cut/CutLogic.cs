@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using _Project.Helper.Utils;
 using _Project.Layers.Game_Logic.Platform;
 using _Project.Layers.Game_Logic.Signals;
+using _Project.Layers.Infrastructure.Pools;
 using UnityEngine;
 using Zenject;
 
@@ -17,7 +18,7 @@ namespace _Project.Layers.Game_Logic.Cut
         private CutLogicData _cutLogicData;
         private CutterObjectConfig _cutterObjectConfig;
         private IAlignment _alignment;
-
+        private IObjectPool _platformPool;
         public ICutter CurrentCutter;
 
         private Cutter.Factory _cutterFactory;
@@ -27,14 +28,25 @@ namespace _Project.Layers.Game_Logic.Cut
 
         [Inject]
         public void Construct(SignalBus signalBus, PlatformTracker platformTracker, CutLogicData cutLogicData,
-            CutterObjectConfig cutterObjectConfig, IAlignment alignment, Cutter.Factory cutterFactory)
+            CutterObjectConfig cutterObjectConfig, IAlignment alignment, IObjectPool pool, Cutter.Factory cutterFactory)
         {
             _signalBus = signalBus;
             _platformTracker = platformTracker;
             _cutLogicData = cutLogicData;
             _cutterObjectConfig = cutterObjectConfig;
             _alignment = alignment;
+            _platformPool = pool;
             _cutterFactory = cutterFactory;
+
+            SLog.InjectionStatus(this,
+                (nameof(_signalBus), _signalBus),
+                (nameof(_platformTracker), _platformTracker),
+                (nameof(_cutLogicData), _cutLogicData),
+                (nameof(_cutterObjectConfig), _cutterObjectConfig),
+                (nameof(_alignment), _alignment),
+                (nameof(_platformPool), _platformPool),
+                (nameof(_cutterFactory), _cutterFactory)
+            );
         }
 
         private void OnEnable()
@@ -52,7 +64,8 @@ namespace _Project.Layers.Game_Logic.Cut
         {
             if (_platformTracker.NextPlatform == null)
             {
-                Debug.LogWarning("Pretreatment canceled, Next Platform is not yet tracked!");
+                Debug.LogWarning($"[{GetType().Name}].Pretreatment canceled because NextPlatform not yet tracked! " +
+                                 "It can be fixed, but it will not cause any issues as it is set to not affect the game logic.");
                 return;
             }
 
@@ -98,17 +111,14 @@ namespace _Project.Layers.Game_Logic.Cut
                 || _cutLogicData.NextPlatform.Location.BackwardLeft.x >
                 _cutLogicData.CurrentPlatform.Location.ForwardRight.x)
             {
-                Debug.LogError("There is no intersection");
+                Debug.LogWarning("There is no intersection");
                 _alignment.PerfectIntersectionStreak = 0;
-                // ObjectPool.Enqueue(_platformRuntimeData.NextPlatform, "Platform");
+                _platformPool.Release(_platformTracker.NextPlatform);
                 return;
             }
 
             if (_cutLogicData.NextPlatform.Angle.WithBackwardLeft < _cutLogicData.CurrentPlatform.Angle.WithForwardLeft)
             {
-                Debug.Log("platform on the left by player");
-
-                // //TODO: add tolerance to perfect platform aligning
                 if (_alignment.IsTherePerfectAlignment(_cutLogicData.NextPlatform.Location.BackwardLeft,
                         _cutLogicData.CurrentPlatform.Location.ForwardLeft,
                         _cutLogicData.AlignmentToleranceBoundLeft))
@@ -119,9 +129,7 @@ namespace _Project.Layers.Game_Logic.Cut
                         _platformTracker.CurrentPlatform.GetTransform());
                     // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
                     _alignment.PerfectIntersectionStreak++;
-                    //call sound
                     _signalBus.Fire(new StreakSignal(_alignment.PerfectIntersectionStreak));
-                    //call text
                     _cutLogicData.AlignmentToleranceBoundLeft = .25f;
 
                     return;
@@ -129,16 +137,9 @@ namespace _Project.Layers.Game_Logic.Cut
 
                 _alignment.PerfectIntersectionStreak = 0;
                 _signalBus.Fire<StreakLostSignal>();
-
-                Debug.Log("NOT Perfect Alignment on left");
+;
                 SpawnCutter(_cutterFactory, _cutLogicData.CurrentPlatform.Location.ForwardLeft,
                     Quaternion.Euler(0.0f, 0.0f, 90.0f), out CurrentCutter);
-
-                if (CurrentCutter == null)
-                {
-                    Debug.LogWarning("CutLogic: SpawnCutter hiç cutter üretmedi!");
-                    return;
-                }
 
                 CurrentCutter?.ExternalCut(CurrentCutter.GetTransform(), _platformTracker.NextPlatform,
                     FellHullSide.Left,
@@ -148,9 +149,6 @@ namespace _Project.Layers.Game_Logic.Cut
             else if (_cutLogicData.NextPlatform.Angle.WithBackwardLeft <
                      Mathf.Abs(_cutLogicData.CurrentPlatform.Angle.WithForwardLeft))
             {
-                Debug.Log("platform on the right by player");
-
-                //TODO: add tolerance to perfect platform aligning
                 if (_alignment.IsTherePerfectAlignment(_cutLogicData.NextPlatform.Location.BackwardRight,
                         _cutLogicData.CurrentPlatform.Location.ForwardRight,
                         _cutLogicData.AlignmentToleranceBoundRight))
@@ -161,9 +159,7 @@ namespace _Project.Layers.Game_Logic.Cut
                         _platformTracker.CurrentPlatform.GetTransform());
                     // _platformTracker.NextPlatform.Outline.gameObject.SetActive(true);
                     _alignment.PerfectIntersectionStreak++;
-                    // //call sound
                     _signalBus.Fire(new StreakSignal(_alignment.PerfectIntersectionStreak));
-                    //call text
                     _cutLogicData.AlignmentToleranceBoundRight = .25f;
 
                     return;
@@ -171,19 +167,6 @@ namespace _Project.Layers.Game_Logic.Cut
 
                 _alignment.PerfectIntersectionStreak = 0;
                 _signalBus.Fire<StreakLostSignal>();
-
-                Debug.Log("NOT Perfect Alignment on right");
-                if (_cutterObjectConfig == null)
-                {
-                    Debug.LogError("_cutterObjectConfig is null");
-                    return;
-                }
-
-                if (_cutLogicData == null)
-                {
-                    Debug.LogError("_cutLogicData is null");
-                    return;
-                }
 
                 SpawnCutter(_cutterFactory, _cutLogicData.CurrentPlatform.Location.ForwardRight,
                     Quaternion.Euler(0.0f, 0.0f, 90.0f), out CurrentCutter);
@@ -193,23 +176,14 @@ namespace _Project.Layers.Game_Logic.Cut
                     _platformTracker.NextPlatform.GetRenderer().material);
             }
 
-
         }
-
-        // private void SetInternalPositionBeforeAssign(ref Vector3 position, ref Quaternion rotation)
-        // {
-        //     Position = position;
-        //     Rotation = rotation;
-        // }
-        //
-        public void SpawnCutter(Cutter.Factory cutterFactory, Vector3 position, Quaternion rotation,
+        
+        private void SpawnCutter(Cutter.Factory cutterFactory, Vector3 position, Quaternion rotation,
             out ICutter spawnedCutter)
         {
-            // SetInternalPositionBeforeAssign(ref position, ref rotation);
-            // spawnedCutter = Instantiate(Prefab, position, rotation).GetComponent<Cutter>();
             if (cutterFactory == null)
             {
-                Debug.LogError("CutterFactory is NULL! Injection olmadı.");
+                Debug.LogError("Cutter.Factory is not injected");
                 spawnedCutter = null;
                 return;
             }

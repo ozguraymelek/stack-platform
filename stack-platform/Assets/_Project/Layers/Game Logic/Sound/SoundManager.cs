@@ -1,4 +1,4 @@
-using System;
+using _Project.Helper.Utils;
 using _Project.Layers.Game_Logic.Signals;
 using UnityEngine;
 using Zenject;
@@ -19,8 +19,9 @@ namespace _Project.Layers.Game_Logic.Sound
         {
             _signalBus = signalBus;
 
-            Debug.Log($"[SoundManager] Construct called! " +
-                      $"SignalBus is {(_signalBus == null ? "NULL" : "OK")}");
+            SLog.InjectionStatus(this,
+                (nameof(_signalBus), _signalBus)
+            );
         }
 
         private void OnEnable()

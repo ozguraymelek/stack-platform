@@ -1,13 +1,10 @@
-using System;
 using _Project.Helper.ZEnject;
 using _Project.Layers.Data.Entities;
-using _Project.Layers.Data.Interfaces.Player;
 using _Project.Layers.Game_Logic.Cut;
 using _Project.Layers.Game_Logic.Game_Flow;
 using _Project.Layers.Game_Logic.Game_Flow.Level_Finish;
 using _Project.Layers.Game_Logic.Platform;
 using _Project.Layers.Game_Logic.Player;
-using _Project.Layers.Game_Logic.Player.Services;
 using _Project.Layers.Game_Logic.Signals;
 using _Project.Layers.Infrastructure.Pools;
 using _Project.Layers.Presentation;
@@ -18,6 +15,9 @@ namespace _Project.Layers.Infrastructure.Installers
 {
     public class GameInstaller : MonoInstaller
     {
+        [SerializeField] private GroundCheck groundCheck;
+
+        
         [SerializeField] private float defaultPlayerMovementSpeed;
         [SerializeField] private LevelDatabase levelDatabase;
         
@@ -39,19 +39,16 @@ namespace _Project.Layers.Infrastructure.Installers
 
             Container.Bind<IInputProvider>().To<InputReceiver>().FromComponentInHierarchy().AsSingle();
             
+            Container.BindInterfacesAndSelfTo<GroundCheck>()
+                .FromComponentInHierarchy()
+                .AsSingle();
+            
             //entity
             Container.Bind<PlayerEntity>().AsSingle().WithArguments(defaultPlayerMovementSpeed);
             Container.Bind<PlayerMovement>().FromComponentInHierarchy().AsSingle().NonLazy();
             Container.Bind<PlayerApi>().FromComponentInHierarchy().AsSingle().NonLazy();
             Container.Bind<PlayerInteraction>().FromComponentInHierarchy().AsSingle().NonLazy();
 
-            //movement
-            // Container.Bind<EndlessMovement>().AsSingle();
-            // Container.Bind<SwerveMovement>().AsSingle();
-            
-            //provider
-            // Container.BindInterfacesAndSelfTo<MovementProvider>().AsSingle().NonLazy();
-            
             Container.Bind<PlatformTracker>().AsSingle().NonLazy();
             
             Container.BindInstance(platformPrefab).WithId("Platform");
@@ -59,15 +56,12 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.BindInstance(initialPoolSize).WithId("InitialPoolSize");
             
             Container.BindInstance(CutLogicData).AsSingle().NonLazy();
-            // Container.BindInstance(CutterObjectConfig).AsSingle().NonLazy();
-            // Container.Inject(CutterObjectConfig);
             Container.BindInstance(CuttedObjectConfig).AsSingle().NonLazy();
             
             Container.BindInterfacesAndSelfTo<ObjectPooling>()
                 .AsSingle()
                 .NonLazy();
             
-            // Container.Bind<FinishInteraction>().FromComponentInHierarchy().AsSingle().NonLazy();
             Container.BindFactory<FinishInteraction, FinishInteraction.Factory>()
                 .FromComponentInNewPrefab(finishPlatformPrefab)
                 .AsSingle();
@@ -91,6 +85,7 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.DeclareSignal<GameStartedSignal>();
             Container.DeclareSignal<LevelStartedSignal>();
             Container.DeclareSignal<LevelFinishedSignal>();
+            Container.DeclareSignal<GameFailedSignal>();
             Container.DeclareSignal<PlayerInteractedWithPlatformSignal>();
             Container.DeclareSignal<PlayerInteractedWithFinishSignal>();
             Container.DeclareSignal<PlatformStopRequestedSignal>();

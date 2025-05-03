@@ -1,3 +1,4 @@
+using _Project.Layers.Game_Logic.Player;
 using _Project.Layers.Game_Logic.Signals;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -12,16 +13,13 @@ namespace _Project.Layers.Game_Logic.Animation
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex,
             AnimatorControllerPlayable controller)
         {
-            if (stateInfo.IsName("Run"))
-            {
-                Debug.LogWarning("Run");
+            if (stateInfo.IsName("Run")) 
                 _signalBus.Fire(new MovementToggleSignal(true));
-            }
-            else if (stateInfo.IsName("Victory Idle") || stateInfo.IsName("Dance"))
-            {
-                Debug.LogWarning("Stopped");
+
+            else if (stateInfo.IsName("Victory Idle") 
+                     || stateInfo.IsName("Dance"))
                 _signalBus.Fire(new MovementToggleSignal(false));
-            }
+
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, 
@@ -29,7 +27,6 @@ namespace _Project.Layers.Game_Logic.Animation
         {
             if (stateInfo.IsName("Standing Up"))
             {
-                Debug.LogWarning("Standing Up");
                 _signalBus?.Fire<PhysicToggleSignal>();
             }
         }
