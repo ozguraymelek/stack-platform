@@ -51,13 +51,13 @@ namespace _Project.Layers.Game_Logic.Cut
 
         private void OnEnable()
         {
-            _signalBus.Subscribe<PlatformStopRequestedSignal>(Pretreatment);
+            _signalBus.Subscribe<CutRequestSignal>(Pretreatment);
             LastHullWidth = 1.5f;
         }
 
         private void OnDisable()
         {
-            _signalBus.Unsubscribe<PlatformStopRequestedSignal>(Pretreatment);
+            _signalBus.Unsubscribe<CutRequestSignal>(Pretreatment);
         }
 
         private void Pretreatment()

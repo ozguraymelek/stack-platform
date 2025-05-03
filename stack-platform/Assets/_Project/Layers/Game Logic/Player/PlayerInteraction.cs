@@ -35,8 +35,8 @@ namespace _Project.Layers.Game_Logic.Player
         {
             if (_inputProvider.ClickedLeftMouse())
             {
-                Debug.Log("ClickedLeftMouse");
                 _signalBus.Fire(new PlatformStopRequestedSignal());
+                _signalBus.Fire(new CutRequestSignal());
                 _signalBus.Fire(new InputToggleSignal(false));
             }
         }

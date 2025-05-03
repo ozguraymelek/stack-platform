@@ -38,7 +38,6 @@ namespace _Project.Layers.Presentation
         
         private void OnToggleInput(InputToggleSignal signal)
         {
-            Debug.LogError("InputReceiver: OnToggleInput called");
             InputEnabled = signal.Enable;
         }
         

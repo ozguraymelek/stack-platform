@@ -42,7 +42,7 @@ namespace _Project.Layers.Game_Logic.Game_Flow.Level_Finish
         private void OnTriggerEnter(Collider other)
         {
             if (!other.transform.TryGetComponent(out PlayerApi playerApi)) return;
-            // _signalBus.Fire(new InputToggleSignal(false));
+            _signalBus.Fire(new InputToggleSignal(false));
             _signalBus.Fire<LevelFinishedSignal>();
             _platformTracker.CurrentFinishPlatform = _finish;
             _groundCheckWrapper.CanCheck = false;

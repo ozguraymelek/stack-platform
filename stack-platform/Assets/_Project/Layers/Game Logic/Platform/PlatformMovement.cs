@@ -48,8 +48,6 @@ namespace _Project.Layers.Game_Logic.Platform
         
         private void OnStopRequested()
         {
-            Debug.Log("PlatformStopRequestedSignal alındı — Fire ediyorum InputToggleSignal(false)");
-
             _isMoving = false;
         }
     }

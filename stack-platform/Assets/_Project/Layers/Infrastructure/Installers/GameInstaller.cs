@@ -89,6 +89,7 @@ namespace _Project.Layers.Infrastructure.Installers
             Container.DeclareSignal<PlayerInteractedWithPlatformSignal>();
             Container.DeclareSignal<PlayerInteractedWithFinishSignal>();
             Container.DeclareSignal<InputToggleSignal>();
+            Container.DeclareSignal<CutRequestSignal>();
             Container.DeclareSignal<PlatformStopRequestedSignal>();
             Container.DeclareSignal<StreakSignal>();
             Container.DeclareSignal<StreakLostSignal>();
