@@ -18,8 +18,9 @@ namespace _Project.Layers.Game_Logic.Platform
         public List<Platform> SpawnedPlatforms;
         [SerializeField] private PlatformMaterialData platformMaterialData;
         
-        private SignalBus _signalBus;
         
+        private DiContainer _container;
+        private SignalBus _signalBus;
         private IObjectPool _platformPool;
         private PlatformTracker _platformTracker;
         private LevelManager _levelManager;
@@ -29,8 +30,9 @@ namespace _Project.Layers.Game_Logic.Platform
         [Inject]
         public void Construct(SignalBus signalBus, IObjectPool platformPool, 
             PlatformTracker platformTracker, LevelManager levelManager, 
-            CutLogic cutLogic, CuttedObjectConfig cuttedObjectConfig )
+            CutLogic cutLogic, CuttedObjectConfig cuttedObjectConfig, DiContainer container)
         {
+            _container = container;
             _signalBus = signalBus;
             _platformPool = platformPool;
             _platformTracker = platformTracker;
@@ -72,12 +74,16 @@ namespace _Project.Layers.Game_Logic.Platform
                 {
                     _platformTracker.SetNext(interactable);
                 }
+
+                _signalBus.Fire(new InputToggleSignal(true));
             }
         }
 
         private Platform SpawnProcess()
         {
-            var spawnedPlatform = _platformPool.Get().GetReference();
+            var handle = _platformPool.Get();
+            var spawnedPlatform = handle.GetReference();
+            _container.InjectGameObject(spawnedPlatform.gameObject);
             SpawnedPlatforms.Add(spawnedPlatform);
             return spawnedPlatform;
         }

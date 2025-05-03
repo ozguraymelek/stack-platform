@@ -1016,7 +1016,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentLevel: {fileID: 0}
   CurrentLevelIndex: 0
-  CurrentPlatformCount: 0
 --- !u!1 &810435464
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,6 +1377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65212db255845ab4ebcadb5bb7e4ecde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputEnabled: 0
 --- !u!1 &991779143
 GameObject:
   m_ObjectHideFlags: 0

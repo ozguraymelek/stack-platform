@@ -1,6 +1,7 @@
 using System;
 using _Project.Layers.Data.Entities;
 using _Project.Layers.Game_Logic.Signals;
+using _Project.Layers.Presentation;
 using UnityEngine;
 using Zenject;
 
@@ -40,20 +41,15 @@ namespace _Project.Layers.Game_Logic.Platform
         {
             if (_isMoving == false) return;
 
-            // Debug.Log($"spawned right: {_currentPlatformData.IsSpawnedRight}");
             transform.position += new Vector3(
                 (_currentPlatformData.IsSpawnedRight ? -MovementDirection.x : MovementDirection.x) * moveSpeed *
                 Time.deltaTime, 0, 0);
         }
         
-        
-        public void OnInstantiated(IPlatformData platformData)
-        {
-            _currentPlatformData = platformData;
-        }
-        
         private void OnStopRequested()
         {
+            Debug.Log("PlatformStopRequestedSignal alındı — Fire ediyorum InputToggleSignal(false)");
+
             _isMoving = false;
         }
     }

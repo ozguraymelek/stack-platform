@@ -61,15 +61,14 @@ namespace _Project.Layers.Game_Logic.Player
                 OnFallOff();
             }
             else if (grounded)
-            {
                 _wasGrounded = true;
-            }
         }
 
         private void OnFallOff()
         {
             CanCheck = false;
             _signalBus.Fire<GameFailedSignal>();
+            // _signalBus.Fire(new InputToggleSignal(false));
         }
     }
 }

@@ -15,6 +15,7 @@ namespace _Project.Helper.Utils
         /// <param name="injections"></param>
         public static void InjectionStatus(object caller, params (string name, object value)[] injections)
         {
+#if UNITY_EDITOR
             if (_isInjectionStatusLogActive == false) return;
             var sb = new StringBuilder();
             
@@ -33,9 +34,10 @@ namespace _Project.Helper.Utils
             if (!anyNull)
                 Debug.LogWarning(sb.ToString());
             else
-                Debug.LogError(sb.ToString());
-            
+                Debug.LogError(sb.ToString()); 
+#endif
         }
+        
 #if UNITY_EDITOR
         [MenuItem("Log/Injection Status")]
         public static void LogToggle()

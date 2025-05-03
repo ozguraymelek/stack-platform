@@ -22,7 +22,6 @@ namespace _Project.Layers.Game_Logic.Game_Flow
         
         public LevelEntity CurrentLevel;
         public int CurrentLevelIndex;
-        public int CurrentPlatformCount = 0;
         
         [Inject]
         public void Construct(PlatformSpawner platformSpawner, FinishSpawner finishSpawner, 
@@ -50,34 +49,36 @@ namespace _Project.Layers.Game_Logic.Game_Flow
             }
 
             _cutLogic.LastHullWidth = 1.5f;
-            _cutLogic.CurrentCutter = null;
-            CurrentLevel = _levelDatabase.levels[index];
-            var levelData = _levelDatabase.levels[index];
-            CurrentPlatformCount = 0;
             
-            if (CurrentLevelIndex != 0)
+            _cutLogic.CurrentCutter = null;
+            
+            CurrentLevel = _levelDatabase.levels[index];
+
+            if (_platformTracker.InitialPlatform != null && _platformTracker.CurrentFinishPlatform != null)
             {
                 CurrentLevel.AlignFirstPlatform
                     (_platformTracker.CurrentFinishPlatform, _platformTracker.InitialPlatform);
             }
             
             _finishSpawner.SpawnFinishPlatform();
+            
             CurrentLevel.IsReachedTarget = false;
+            
             _platformSpawner.SpawnedPlatforms.RemoveRange(1, _platformSpawner.SpawnedPlatforms.Count - 1);
         }
         
         public void NextLevel(TMP_Text currentLevelText)
         {
             CurrentLevelIndex++;
-            currentLevelText.text = $"Current Level: {CurrentLevelIndex + 1}";
             if (CurrentLevelIndex >= _levelDatabase.levels.Count)
             {
                 CurrentLevelIndex = 0;
-                Debug.LogError("All levels have been loaded");
+                Debug.LogWarning($"All levels completed, returning to the {_levelDatabase.levels[0].name}");
             }
-
+            
+            currentLevelText.text = $"Current Level: {CurrentLevelIndex + 1}";
+            
             _signalBus.Fire<LevelStartedSignal>();
-            // FindObjectOfType<Player>().animator.SetBool("Dance", false);
             LoadLevel(CurrentLevelIndex);
         }
 
