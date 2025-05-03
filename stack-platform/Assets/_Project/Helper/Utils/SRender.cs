@@ -8,7 +8,8 @@ namespace _Project.Helper.Utils
         {
             if (renderer == null)
             {
-                Debug.LogError("Renderer is null");
+                Debug.LogError("The object you want to check if it is in the camera frustum area " +
+                               "does not have a Renderer component.");
                 return false;
             }
 
@@ -16,7 +17,6 @@ namespace _Project.Helper.Utils
 
             return !GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
         }
-        
         public static Vector3 AnyObjectVertexLocation(Renderer rend, VertexLocation location, bool maxY = true)
         {
             var b = rend.bounds;

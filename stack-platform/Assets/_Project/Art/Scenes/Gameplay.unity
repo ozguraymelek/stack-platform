@@ -1058,6 +1058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnedPlatforms:
   - {fileID: 1901009517549921016}
+  platformMaterialData: {fileID: 11400000, guid: 05e7e60cbdc7d694884e511031bbe9d1, type: 2}
 --- !u!114 &825846434
 MonoBehaviour:
   m_ObjectHideFlags: 0

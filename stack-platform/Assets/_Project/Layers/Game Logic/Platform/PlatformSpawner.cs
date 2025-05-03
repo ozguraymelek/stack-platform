@@ -16,8 +16,8 @@ namespace _Project.Layers.Game_Logic.Platform
     public class PlatformSpawner : MonoBehaviour
     {
         public List<Platform> SpawnedPlatforms;
+        [SerializeField] private PlatformMaterialData platformMaterialData;
         
-        // [Inject] private DiContainer _container;
         private SignalBus _signalBus;
         
         private IObjectPool _platformPool;
@@ -63,36 +63,61 @@ namespace _Project.Layers.Game_Logic.Platform
             {
                 _platformTracker.SetCurrent(signal.InteractedPlatform);
 
-                var newPlatform = _platformPool.Get().GetReference();
-                newPlatform.PlatformPool = _platformPool;
-
-                if (_cutLogic.CurrentCutter != null && _cutLogic.CurrentCutter.IsActiveHullOnLeft == true)
-                {
-                    newPlatform.transform.localScale = new Vector3(_cuttedObjectConfig.LeftHull.Width, 0.1f, 2f);
-                }
-                else if (_cutLogic.CurrentCutter != null && _cutLogic.CurrentCutter.IsActiveHullOnRight == true)
-                {
-                    newPlatform.transform.localScale = new Vector3(_cuttedObjectConfig.RightHull.Width, 0.1f, 2f);
-                }
-                else
-                {
-                    newPlatform.transform.localScale = new Vector3(_cutLogic.LastHullWidth, 0.1f, 2f);
-                }
-            
-                SpawnedPlatforms.Add(newPlatform);
-            
-                var isSpawnedRight = SpawnedPlatforms[^1].IsSpawnedRight;
-                var spawnPos = newPlatform.transform.SetWithZRandX(SpawnedPlatforms[0].transform,
-                    ref isSpawnedRight,
-                    (SpawnedPlatforms.Count - 1) * SpawnedPlatforms[^1].transform.localScale.z, 4);
-                SpawnedPlatforms[^1].IsSpawnedRight = isSpawnedRight;
-                newPlatform.transform.position = spawnPos;
-
-                if (newPlatform.TryGetComponent<IInteractable<Platform>>(out var interactable))
+                var spawnedPlatform = SpawnProcess();
+                
+                CutProcessSettings(spawnedPlatform);
+                VisualSettings(spawnedPlatform);
+                
+                if (spawnedPlatform.TryGetComponent<IInteractable<Platform>>(out var interactable))
                 {
                     _platformTracker.SetNext(interactable);
                 }
             }
+        }
+
+        private Platform SpawnProcess()
+        {
+            var spawnedPlatform = _platformPool.Get().GetReference();
+            SpawnedPlatforms.Add(spawnedPlatform);
+            return spawnedPlatform;
+        }
+
+        private void CutProcessSettings(Platform platform)
+        {
+            platform.PlatformPool = _platformPool;
+
+            CutterWidth(platform);
+            
+            var isSpawnedRight = SpawnedPlatforms[^1].IsSpawnedRight;
+            
+            var spawnPos = platform.transform.SetWithZRandX(SpawnedPlatforms[0].transform,
+                ref isSpawnedRight,
+                (SpawnedPlatforms.Count - 1) * SpawnedPlatforms[^1].transform.localScale.z, 4);
+            
+            SpawnedPlatforms[^1].IsSpawnedRight = isSpawnedRight;
+            
+            platform.transform.position = spawnPos;
+        }
+
+        private void CutterWidth(Platform platform)
+        {
+            if (_cutLogic.CurrentCutter != null && _cutLogic.CurrentCutter.IsActiveHullOnLeft == true)
+            {
+                platform.transform.localScale = new Vector3(_cuttedObjectConfig.LeftHull.Width, 0.1f, 2f);
+            }
+            else if (_cutLogic.CurrentCutter != null && _cutLogic.CurrentCutter.IsActiveHullOnRight == true)
+            {
+                platform.transform.localScale = new Vector3(_cuttedObjectConfig.RightHull.Width, 0.1f, 2f);
+            }
+            else
+            {
+                platform.transform.localScale = new Vector3(_cutLogic.LastHullWidth, 0.1f, 2f);
+            }
+        }
+
+        private void VisualSettings(Platform platform)
+        {
+            platform.GetRenderer().material = SRandom.Material(platformMaterialData.materials);
         }
     }
 }
