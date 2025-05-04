@@ -10,6 +10,8 @@ namespace Source.Data.Cut
         public NextPlatformCutLogicData NextPlatform;
         public float AlignmentToleranceBoundRight;
         public float AlignmentToleranceBoundLeft;
+
+        public bool ShowVisualization;
     }
     
     [Serializable]
